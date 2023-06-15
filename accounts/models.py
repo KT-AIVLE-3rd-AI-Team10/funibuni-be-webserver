@@ -29,3 +29,14 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'id'
     REQUIRED_FIELDS = ['username', 'nickname', 'address', 'phone_number', 'email']
+
+class BlacklistedToken(models.Model):
+    token = models.TextField(unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+class OutstandingToken(models.Model):
+    token = models.TextField(unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def blacklist(self):
+        BlacklistedToken.objects.create(token=self.token)

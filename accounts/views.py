@@ -7,6 +7,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate, login, logout
 from accounts.models import User
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import get_authorization_header
+from rest_framework_simplejwt.exceptions import TokenError
+from django.views.decorators.csrf import csrf_exempt
+from accounts.models import OutstandingToken
+from accounts.models import BlacklistedToken
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -49,10 +54,17 @@ def user_login_view(request):
     }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def user_logout_view(request):
-    logout(request)  # 로그아웃 처리
-    return Response({'success': 'Successfully logged out'}, status=status.HTTP_200_OK)
+    refresh_token = request.data.get('refresh_token')
 
+    if refresh_token:
+        # BlacklistedToken 모델을 사용하여 refresh_token을 블랙리스트에 추가합니다.
+        BlacklistedToken.objects.create(token=refresh_token)
+        return Response({'success': 'Successfully logged out'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def user_update_view(request):
