@@ -24,11 +24,18 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
+    is_superuser = models.BooleanField(default=False)
     objects = UserManager()
 
     USERNAME_FIELD = 'id'
     REQUIRED_FIELDS = ['username', 'nickname', 'address', 'phone_number', 'email']
+    
+    def has_perm(self, perm, obj=None):
+        return True
+
+
+    def has_module_perms(self, app_label):
+        return True
 
 class BlacklistedToken(models.Model):
     token = models.TextField(unique=True)
@@ -40,3 +47,4 @@ class OutstandingToken(models.Model):
 
     def blacklist(self):
         BlacklistedToken.objects.create(token=self.token)
+        
