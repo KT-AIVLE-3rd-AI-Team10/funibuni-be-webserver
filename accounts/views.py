@@ -53,18 +53,30 @@ def user_login_view(request):
         'access': str(access)
     }, status=status.HTTP_200_OK)
 
+# @api_view(['POST'])
+# @permission_classes([AllowAny])
+# def user_logout_view(request):
+#     refresh_token = request.data.get('refresh_token')
+
+#     if refresh_token:
+#         # BlacklistedToken 모델을 사용하여 refresh_token을 블랙리스트에 추가합니다.
+#         BlacklistedToken.objects.create(token=refresh_token)
+#         return Response({'success': 'Successfully logged out'}, status=status.HTTP_200_OK)
+#     else:
+#         return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def user_logout_view(request):
-    refresh_token = request.data.get('refresh_token')
+    refresh_token = request.headers.get('Authorization')
 
     if refresh_token:
+        refresh_token = refresh_token.replace('Bearer ', '')
+
         # BlacklistedToken 모델을 사용하여 refresh_token을 블랙리스트에 추가합니다.
         BlacklistedToken.objects.create(token=refresh_token)
         return Response({'success': 'Successfully logged out'}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
-    
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def user_update_view(request):
