@@ -34,7 +34,7 @@ def create_post(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update_post(request, post_id):
     try:
@@ -42,15 +42,14 @@ def update_post(request, post_id):
     except Post.DoesNotExist:
         return Response({'detail': 'Post not found.'}, status=status.HTTP_404_NOT_FOUND)
     
-    if post.user != request.user:
+    if post.nickname != request.user:
         return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
     
-    serializer = PostSerializer(post, data=request.data)
+    serializer = PostSerializer(post, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_post(request, post_id):
