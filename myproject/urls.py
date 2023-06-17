@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from accounts.views import user_register_view, user_login_view, user_logout_view, user_update_view, user_delete_view
-
+from post.views import get_post_list, get_post_detail, create_post, update_post, delete_post
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/register/', user_register_view, name='user-register'),
@@ -25,4 +25,10 @@ urlpatterns = [
     path('api/logout/', user_logout_view, name='user-logout'),
     path('api/update/', user_update_view, name='user-update'),
     path('api/delete/', user_delete_view, name='user-delete'),
+    #게시판
+    path('post/', get_post_list, name='post-list'),
+    path('post/<int:post_id>/', get_post_detail, name='post-detail'),
+    path('post/create/', create_post, name='post-create'),
+    path('post/<int:post_id>/update/', update_post, name='post-update'),
+    path('post/<int:post_id>/delete/', delete_post, name='post-delete'),
 ]
