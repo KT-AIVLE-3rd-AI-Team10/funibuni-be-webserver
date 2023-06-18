@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from accounts.views import user_register_view, user_login_view, user_logout_view, user_update_view, user_delete_view
 from post.views import get_post_list, get_post_detail, create_post, update_post, delete_post
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/register/', user_register_view, name='user-register'),
