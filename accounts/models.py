@@ -19,7 +19,6 @@ class User(AbstractBaseUser):
     id = models.CharField(primary_key=True, max_length=255)
     username = models.CharField(max_length=255)
     nickname = models.CharField(max_length=255, unique=True)
-    address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
@@ -28,7 +27,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'id'
-    REQUIRED_FIELDS = ['username', 'nickname', 'address', 'phone_number', 'email']
+    REQUIRED_FIELDS = ['username', 'nickname', 'phone_number', 'email']
     
     def has_perm(self, perm, obj=None):
         return True
