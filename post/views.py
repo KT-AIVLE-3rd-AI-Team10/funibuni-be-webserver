@@ -58,7 +58,7 @@ def delete_post(request, post_id):
     except Post.DoesNotExist:
         return Response({'detail': 'Post not found.'}, status=status.HTTP_404_NOT_FOUND)
     
-    if post.user != request.user:
+    if post.nickname != request.user:
         return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
     
     post.delete()
