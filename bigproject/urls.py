@@ -16,22 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from accounts.views import user_signup_view, phone_number_login,user_logout_view,user_delete_view,user_info_view
-from post.views import get_post_list,create_post,post_detail
+from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view
 from reports.views import report_post
+from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/user/signup', user_signup_view, name='user_signup'),
     path('api/user/signin', phone_number_login, name='phone_number_login'),
     path('api/user/signout', user_logout_view, name='user_signout'),
-    path('api/user/withdrawal', user_delete_view, name='user-withdrawal'),
+    path('api/user/withdrawal', user_delete_view, name='user_withdrawal'),
     path('api/user/info', user_info_view, name='user-info'),
-    
-    path('api/posts', get_post_list, name='post-list'),
-    path('api/posts/create', create_post, name='post-create'),
-    path('api/posts/<int:pk>', post_detail, name='post-detail'),
+    path('api/posts', post_list, name='post_list'),
+    path('api/posts/create', create_post, name='post_create'),
+    path('api/posts/<int:post_id>', post_detail, name='post_detail'),
     path('api/posts/<int:post_id>/report', report_post, name='report_post'),
-    
-    
+    path('api/posts/<int:post_id>/comments/<int:comment_id>', comment_detail, name='comment_detail'),
+    path('api/posts/<int:post_id>/comments', comment_create, name='comment_create'),
+    path('api/posts/<int:post_id>/comments/<int:comment_id>/replies', reply_create, name='reply_create'),
+    # path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>', reply_detail, name='reply-detail'),
+    path('api/posts/<int:post_id>/with-comments', post_with_comments, name='post_with_comments'),  # 게시물 및 댓글, 대댓글 조회 API
 ]
-    

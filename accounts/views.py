@@ -40,7 +40,6 @@ def phone_number_login(request):
         'refresh_token': str(refresh),
     })
     
-#로그아웃
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def user_logout_view(request):
@@ -51,11 +50,11 @@ def user_logout_view(request):
 
         # RefreshToken을 사용하여 토큰 유효성 검증
         try:
-            refresh = AccessToken(refresh_token)
+            refresh = RefreshToken(refresh_token)
             # 토큰 유효성 검증이 성공한 경우에만 계속 진행합니다.
 
             # BlacklistedToken 모델을 사용하여 refresh_token을 블랙리스트에 추가합니다.
-            BlacklistedToken.objects.create(token=refresh_token)
+            BlacklistedToken.objects.create(token=str(refresh.access_token))
 
             # OutstandingToken 모델에서도 해당 토큰을 제거합니다.
             OutstandingToken.objects.filter(token=refresh_token).delete()
