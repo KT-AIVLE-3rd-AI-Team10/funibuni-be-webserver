@@ -141,6 +141,7 @@ AUTH_USER_MODEL = 'accounts.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'accounts.auth.authentications.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -150,7 +151,9 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Access 토큰의 유효 기간 설정
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Refresh 토큰의 유효 기간 설정
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),     # Refresh 토큰의 유효 기간 설정
+    
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken', 'rest_framework_simplejwt.tokens.RefreshToken'),
 }
 
 AUTHENTICATION_BACKENDS = [

@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
 from accounts.serializers import UserSerializer
@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken
 from accounts.models import BlacklistedToken,OutstandingToken
+from accounts.auth.authentications import JWTAuthenticationForRefresh
 
 #회원가입
 @api_view(['POST'])
@@ -41,7 +42,7 @@ def phone_number_login(request):
     })
     
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def user_logout_view(request):
     refresh_token = request.headers.get('Authorization')
 
