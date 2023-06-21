@@ -16,17 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view
+from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh
 from reports.views import report_post
 from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
 
 urlpatterns = [
+    #회원가입 로그인 및 로그아웃
     path("admin/", admin.site.urls),
     path('api/user/signup', user_signup_view, name='user_signup'),
     path('api/user/signin', phone_number_login, name='phone_number_login'),
+    path('api/user/auto-signin', auto_signin, name='auto_login'),
     path('api/user/signout', user_logout_view, name='user_signout'),
     path('api/user/withdrawal', user_delete_view, name='user_withdrawal'),
-    path('api/user/info', user_info_view, name='user-info'),
+    path('api/user/info', user_info_view, name='user_info'),
+    path('api/user/token-refresh', token_refresh, name='token_refresh'),
+    #게시판
     path('api/posts', post_list, name='post_list'),
     path('api/posts/create', create_post, name='post_create'),
     path('api/posts/<int:post_id>', post_detail, name='post_detail'),

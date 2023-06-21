@@ -22,17 +22,6 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(phone_number, name, password,**extra_fields)
 
-    def generate_nickname(self, name):
-        # 여기에서 닉네임을 생성하는 로직을 작성합니다.
-        # 예시: 성(first name) + '버니'
-        first_name = name.split()[0]  # 이름 추출
-        nickname = first_name + '버니'
-        return nickname
-    def update_nickname(self, user, nickname):
-        user.nickname = nickname
-        user.save()
-        return user
-
 class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     phone_number = models.CharField(max_length=20,unique=True)
