@@ -51,30 +51,36 @@ def phone_number_login(request):
     })
 
 #자동 로그인
+
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def auto_signin(request):
     refresh_token = request.headers.get('Authorization')
 
     if refresh_token:
         refresh_token = refresh_token.replace('Bearer ', '')
-        # RefreshToken을 사용하여 토큰 유효성 검증
-        try:
-            refresh = RefreshToken(refresh_token)
-            access_token = refresh.access_token
-            BlacklistedToken.objects.create(token=str(refresh_token))
-            new_refresh = RefreshToken.for_user(refresh.get_user())
-            new_refresh_token = new_refresh.access_token
-            return Response({'access_token': str(access_token),
-                             'refresh_token': str(new_refresh_token)}, status=status.HTTP_200_OK)
-        except TokenError as e:
-            return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
-        except IntegrityError:
-            return Response({'error': 'Token already blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response({'error':  'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    
+        try:
+            # 블랙리스트 확인
+            if BlacklistedToken.objects.filter(token=refresh_token).exists():
+                return Response({'error': 'Token is blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 사용자 식별 정보 얻기 (예: 사용자의 id)
+         
+
+            # 새로운 액세스 토큰과 리프레시 토큰 발급
+            new_refresh = RefreshToken()  # 사용자 식별 정보를 리프레시 토큰에 포함
+            new_access_token = str(new_refresh.access_token)
+            new_refresh_token = str(new_refresh)
+
+            # 기존 토큰을 블랙리스트에 추가
+            BlacklistedToken.objects.create(token=refresh_token)  # 사용자 식별 정보 저장
+
+            return Response({'access_token': new_access_token, 'refresh_token': new_refresh_token}, status=200)
+        except TokenError as e:
+            return Response({'error': str(e)}, status=401)
+    else:
+        return Response({'error': 'Refresh token is required'}, status=400)
 #access토큰 재발급
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -86,15 +92,17 @@ def token_refresh(request):
 
         try:
             refresh = RefreshToken(refresh_token)
+            
+            # 블랙리스트 확인
+            if BlacklistedToken.objects.filter(token=refresh_token).exists():
+                return Response({'error': 'Token is blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
+            
             access_token = str(refresh.access_token)
             return Response({'access_token': access_token}, status=200)
         except TokenError as e:
             return Response({'error': str(e)}, status=401)
-        except IntegrityError:
-            return Response({'error': 'Token already blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'error': 'Refresh token is required'}, status=400)
-    
 #로그아웃 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
