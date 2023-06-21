@@ -18,7 +18,13 @@ def user_signup_view(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        refresh = RefreshToken.for_user(user)
+        access = refresh.access_token
+
+        return Response({
+            'refresh': str(refresh),
+            'access': str(access),
+        }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #핸드폰 로그인
@@ -40,7 +46,46 @@ def phone_number_login(request):
         'access_token': str(refresh.access_token),
         'refresh_token': str(refresh),
     })
+
+#자동 로그인
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def auto_signin(request):
+    refresh_token = request.headers.get('Authorization')
+
+    if refresh_token:
+        refresh_token = refresh_token.replace('Bearer ', '')
+        # RefreshToken을 사용하여 토큰 유효성 검증
+        try:
+            refresh = RefreshToken(refresh_token)
+            user = refresh.get('user')
+            access_token = refresh.access_token
+            BlacklistedToken.objects.create(token=str(refresh_token))
+            return Response({'access_token': str(access_token),
+                             'refresh_token': str(refresh_token)}, status=status.HTTP_200_OK)
+        except TokenError as e:
+            return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
     
+#access토큰 재발급
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def token_refresh(request):
+    refresh_token = request.headers.get('Authorization')
+
+    if refresh_token:
+        refresh_token = refresh_token.replace('Bearer ', '')
+
+        try:
+            refresh = RefreshToken(refresh_token)
+            access_token = str(refresh.access_token)
+            return Response({'access_token': access_token}, status=200)
+        except TokenError as e:
+            return Response({'error': str(e)}, status=401)
+    else:
+        return Response({'error': 'Refresh token is required'}, status=400)
+#로그아웃 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 # @authentication_classes([JWTAuthenticationForRefresh])
@@ -56,7 +101,7 @@ def user_logout_view(request):
             # 토큰 유효성 검증이 성공한 경우에만 계속 진행합니다.
 
             # BlacklistedToken 모델을 사용하여 refresh_token을 블랙리스트에 추가합니다.
-            BlacklistedToken.objects.create(token=str(refresh.access_token))
+            BlacklistedToken.objects.create(token=str(refresh_token))
 
             # OutstandingToken 모델에서도 해당 토큰을 제거합니다.
             OutstandingToken.objects.filter(token=refresh_token).delete()
