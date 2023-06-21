@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, phone_number, name, **extra_fields):
+    def create_user(self, phone_number, name, password, **extra_fields):
         if not phone_number:
             raise ValueError('The phone number field must be set')
         if not name:
@@ -11,15 +11,16 @@ class UserManager(BaseUserManager):
         nickname = self.generate_nickname(name)  # 닉네임 생성
 
         extra_fields['nickname'] = nickname  # extra_fields에 nickname 추가
-
+        
         user = self.model(phone_number=phone_number, name=name, **extra_fields)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, phone_number, name, **extra_fields):
+    def create_superuser(self, phone_number, name, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(phone_number, name, **extra_fields)
+        return self.create_user(phone_number, name, password,**extra_fields)
 
     def generate_nickname(self, name):
         # 여기에서 닉네임을 생성하는 로직을 작성합니다.
@@ -43,8 +44,8 @@ class User(AbstractBaseUser):
     is_locked = models.BooleanField(default=False)
     objects = UserManager()
 
-    USERNAME_FIELD = 'id'
-    REQUIRED_FIELDS = ['phone_number', 'name']
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['name']
 
     def has_perm(self, perm, obj=None):
         return True

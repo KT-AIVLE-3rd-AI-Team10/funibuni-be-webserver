@@ -43,6 +43,7 @@ def phone_number_login(request):
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+# @authentication_classes([JWTAuthenticationForRefresh])
 def user_logout_view(request):
     refresh_token = request.headers.get('Authorization')
 
