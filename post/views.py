@@ -141,6 +141,7 @@ def comment_detail(request, post_id, comment_id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#댓글 신고
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def comment_report(request,post_id, comment_id):
@@ -156,6 +157,7 @@ def comment_report(request,post_id, comment_id):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#대댓글 작성
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def create_reply(request, post_id, comment_id):
@@ -177,6 +179,7 @@ def create_reply(request, post_id, comment_id):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#대댓글 수정,삭제
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def reply_detail(request, post_id, comment_id, reply_id):
@@ -200,7 +203,8 @@ def reply_detail(request, post_id, comment_id, reply_id):
     elif request.method == 'DELETE':
         reply.delete()
         return Response({'comment_id': comment_id}, status=status.HTTP_204_NO_CONTENT)
-    
+
+#대댓글 신고
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def reply_report(request, post_id, comment_id, reply_id):
