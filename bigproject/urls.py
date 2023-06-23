@@ -44,7 +44,7 @@ urlpatterns = [
     path('api/posts/<int:post_id>/comments/<int:comment_id>/replies', reply_create, name='reply_create'),
     # path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>', reply_detail, name='reply-detail'),
     path('api/posts/<int:post_id>/with-comments', post_with_comments, name='post_with_comments'),  # 게시물 및 댓글, 대댓글 조회 API
- #나의버니
+    #나의버니
     #path('api/myburni', , ),
     path('api/myburni/posts', sharing_list, name='sharing_list'),
 
