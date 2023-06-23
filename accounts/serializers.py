@@ -17,7 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
             instance.nickname = self.generate_nickname(validated_data['name'])
         instance.save()
         return instance
-
     def generate_nickname(self, name):
         nickname = name[0] + '버니'
         return nickname
