@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh
-from reports.views import report_post
-from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
-from myburni.views import sharing_list
+from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
+
+# from reports.views import report_post
+# from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
 
 urlpatterns = [
     #회원가입 로그인 및 로그아웃
@@ -40,12 +41,11 @@ urlpatterns = [
     path('api/posts/<int:post_id>/like',post_like, name='post_like'),
     path('api/posts/<int:post_id>/comments', comment_create, name='comment_create'),
     path('api/posts/<int:post_id>/comments/<int:comment_id>', comment_detail, name='comment_detail'),
-    path('api/posts/<int:post_id>/comments', comment_create, name='comment_create'),
-    path('api/posts/<int:post_id>/comments/<int:comment_id>/replies', reply_create, name='reply_create'),
-    # path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>', reply_detail, name='reply-detail'),
-    path('api/posts/<int:post_id>/with-comments', post_with_comments, name='post_with_comments'),  # 게시물 및 댓글, 대댓글 조회 API
+    path('api/posts/<int:post_id>/comments/<int:comment_id>/report', comment_report, name='comment_report'),
+    path('api/posts/<int:post_id>/comments/<int:comment_id>/replies',create_reply, name='create_reply'),
+    path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>', reply_detail, name='reply-detail'),
+    path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>/report',reply_report, name='reply_report'),
     #나의버니
     #path('api/myburni', , ),
     path('api/myburni/posts', sharing_list, name='sharing_list'),
-
 ]
