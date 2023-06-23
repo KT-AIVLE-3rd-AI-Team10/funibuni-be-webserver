@@ -19,6 +19,7 @@ from django.urls import path
 from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh
 from reports.views import report_post
 from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
+from myburni.views import sharing_list
 
 urlpatterns = [
     #회원가입 로그인 및 로그아웃
@@ -40,4 +41,7 @@ urlpatterns = [
     path('api/posts/<int:post_id>/comments/<int:comment_id>/replies', reply_create, name='reply_create'),
     # path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>', reply_detail, name='reply-detail'),
     path('api/posts/<int:post_id>/with-comments', post_with_comments, name='post_with_comments'),  # 게시물 및 댓글, 대댓글 조회 API
+    #나의버니
+    #path('api/myburni', , ),
+    path('api/myburni/posts', sharing_list, name='sharing_list'),
 ]
