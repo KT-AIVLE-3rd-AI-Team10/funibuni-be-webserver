@@ -1,13 +1,13 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.response import Response
 from rest_framework import status
-from accounts.serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from accounts.serializers import UserSerializer
 from accounts.models import User
 from accounts.serializers import PhoneNumberLoginSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.tokens import AccessToken
 from accounts.models import BlacklistedToken,OutstandingToken
 from accounts.auth.authentications import JWTAuthenticationForRefresh
 from django.db import IntegrityError
@@ -21,7 +21,6 @@ def user_signup_view(request):
         user = serializer.save()
         refresh = RefreshToken.for_user(user)
         access = refresh.access_token
-
         return Response({
             'access_token': str(access),
             'refresh_token': str(refresh)
@@ -51,7 +50,6 @@ def phone_number_login(request):
     })
 
 #자동 로그인
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def auto_signin(request):
@@ -81,6 +79,7 @@ def auto_signin(request):
             return Response({'error': str(e)}, status=401)
     else:
         return Response({'error': 'Refresh token is required'}, status=400)
+
 #access토큰 재발급
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -103,6 +102,7 @@ def token_refresh(request):
             return Response({'error': str(e)}, status=401)
     else:
         return Response({'error': 'Refresh token is required'}, status=400)
+
 #로그아웃 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -167,7 +167,7 @@ def user_delete_view(request):
         except TokenError as e:
             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except IntegrityError:
-            return Response({'error': '토큰이 이미 블랙리스트에 등록되었습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Token is blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
 
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
