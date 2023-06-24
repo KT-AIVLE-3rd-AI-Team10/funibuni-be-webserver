@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, phone_number, name, password, **extra_fields):
+    def create_user(self, phone_number, name, password=None, **extra_fields):
         if not phone_number:
             raise ValueError('The phone number field must be set')
         if not name:
@@ -17,11 +17,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, phone_number, name, password, **extra_fields):
+    def create_superuser(self, phone_number, name, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(phone_number, name, password,**extra_fields)
-
+    def generate_nickname(self, name):
+        nickname = name[0] + '버니'
+        return nickname
+    
 class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     phone_number = models.CharField(max_length=20,unique=True)

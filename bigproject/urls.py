@@ -47,5 +47,5 @@ urlpatterns = [
     path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>/report',reply_report, name='reply_report'),
     #나의버니
     #path('api/myburni', , ),
-    path('api/myburni/posts', sharing_list, name='sharing_list'),
+    #path('api/myburni/posts', sharing_list, name='sharing_list'),
 ]
