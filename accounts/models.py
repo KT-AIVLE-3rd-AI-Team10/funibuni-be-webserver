@@ -55,4 +55,5 @@ class OutstandingToken(models.Model):
 
     def blacklist(self):
         BlacklistedToken.objects.create(token=self.token)
-        
+
+

@@ -17,8 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh
-from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
-
+from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report,favorite_posts
 # from reports.views import report_post
 # from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
 
@@ -45,7 +44,9 @@ urlpatterns = [
     path('api/posts/<int:post_id>/comments/<int:comment_id>/replies',create_reply, name='create_reply'),
     path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>', reply_detail, name='reply-detail'),
     path('api/posts/<int:post_id>/comments/<int:comment_id>/replies/<int:reply_id>/report',reply_report, name='reply_report'),
+    path('api/posts/<int:post_id>/like-posts', favorite_posts, name='add_to_like_posts'),
     #나의버니
-    #path('api/myburni', , ),
-    #path('api/myburni/posts', sharing_list, name='sharing_list'),
+    path('api/myburni/like-posts',favorite_posts, name='like_posts'),
+    
 ]
+    

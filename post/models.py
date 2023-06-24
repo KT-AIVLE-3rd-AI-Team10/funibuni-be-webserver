@@ -90,3 +90,15 @@ class ReplyReport(models.Model):
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'reply_report'
+        
+class FavoritePost(models.Model):
+    favorite_post_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'favorite_post'
+        

@@ -2,8 +2,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer
-from post.models import Post,User,PostLike,Comment,Reply,ReplyReport
+from .serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer,FavoritePostSerializer
+from post.models import Post,User,PostLike,Comment,Reply,ReplyReport,FavoritePost
 
 #게시판 생성
 @api_view(['POST'])
@@ -70,9 +70,9 @@ def create_postreport(request, post_id):
     except Post.DoesNotExist:
         return Response({'error': '게시물을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = PostReportSerializer(data=request.data)
+    serializer = PostReportSerializer(data=request.data, context={'request': request})  # context 인자 추가
     if serializer.is_valid():
-        serializer.save(user=request.user, post=post)
+        serializer.save(user_id=request.user.id, post_id=post_id)  # user_id, post_id 필드에 직접 값을 전달
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -150,10 +150,10 @@ def comment_report(request,post_id, comment_id):
     except Comment.DoesNotExist:
         return Response({'error': '댓글을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = CommentReportSerializer(data=request.data)
+    serializer = CommentReportSerializer(data=request.data, context={'request': request})  # context 인자 추가
     if serializer.is_valid():
         serializer.save(user=request.user, comment=comment)
-        return Response({'comment_id': comment_id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -219,8 +219,39 @@ def reply_report(request, post_id, comment_id, reply_id):
         return Response({'error': '대댓글을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
     # 대댓글을 신고한 사용자와 현재 인증된 사용자가 동일한 경우, 대댓글을 숨김
-    if reply.reports.filter(user=request.user).exists():
+    if ReplyReport.objects.filter(reply=reply, user=request.user).exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = ReplySerializer(reply, context={'request': request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer = ReplyReportSerializer(data=request.data, context={'request': request})
+    if serializer.is_valid():
+        serializer.save(reply=reply, user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#관심목록리스트
+@api_view(['POST', 'GET'])
+@permission_classes([IsAuthenticated])
+def favorite_posts(request, post_id=None):
+    user = request.user
+
+    if request.method == 'POST':
+        # POST 요청일 경우 게시글을 관심목록에 추가합니다.
+        try:
+            post = Post.objects.get(pk=post_id)
+            favorite, created = FavoritePost.objects.get_or_create(user=user, post=post)
+            if created:
+                favorite_serializer = FavoritePostSerializer(favorite)
+                return Response(favorite_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error': 'Post is already in favorites'}, status=status.HTTP_400_BAD_REQUEST)
+        except Post.DoesNotExist:
+            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    elif request.method == 'GET':
+        # GET 요청일 경우 관심목록에 있는 게시글 리스트를 조회합니다.
+        favorites = FavoritePost.objects.filter(user=user)
+        favorite_posts = [favorite.post for favorite in favorites]
+        post_serializer = PostSerializer(favorite_posts, many=True)
+        return Response(post_serializer.data, status=status.HTTP_200_OK)
+    
