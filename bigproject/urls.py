@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh
 from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
-from myburni.views import liked_posts
+from myburni.views import liked_posts,comment_list
 
 urlpatterns = [
     #회원가입 로그인 및 로그아웃
@@ -47,6 +47,7 @@ urlpatterns = [
     
     #나의버니
     path('api/myburni/like-posts',liked_posts, name='like_posts'),
+    path('api/myburni/activities',comment_list, name='like_posts'),
     
     
 ]
