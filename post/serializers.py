@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from post.models import Post,PostReport,PostLike,Comment,CommentReport,Reply,ReplyReport,FavoritePost
+from post.models import Post,PostReport,PostLike,Comment,CommentReport,Reply,ReplyReport
 from accounts.serializers import UserSerializer
 from django.db import models
 
@@ -107,10 +107,3 @@ class ReplyReportSerializer(serializers.ModelSerializer):
             return {}  # 대댓글을 숨기기 위해 빈 딕셔너리를 반환합니다.
         return super().to_representation(instance)
     
-class FavoritePostSerializer(serializers.ModelSerializer):
-    post = PostSerializer()  # PostSerializer를 중첩하여 사용
-
-    class Meta:
-        model = FavoritePost
-        fields = ['id', 'user', 'post']
-

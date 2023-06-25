@@ -2,8 +2,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer,FavoritePostSerializer
-from post.models import Post,User,PostLike,Comment,Reply,ReplyReport,FavoritePost
+from post.serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer
+from post.models import Post,User,PostLike,Comment,Reply,ReplyReport
 
 #게시판 생성
 @api_view(['POST'])
@@ -229,29 +229,3 @@ def reply_report(request, post_id, comment_id, reply_id):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#관심목록리스트
-@api_view(['POST', 'GET'])
-@permission_classes([IsAuthenticated])
-def favorite_posts(request, post_id=None):
-    user = request.user
-
-    if request.method == 'POST':
-        # POST 요청일 경우 게시글을 관심목록에 추가합니다.
-        try:
-            post = Post.objects.get(pk=post_id)
-            favorite, created = FavoritePost.objects.get_or_create(user=user, post=post)
-            if created:
-                favorite_serializer = FavoritePostSerializer(favorite)
-                return Response(favorite_serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response({'error': 'Post is already in favorites'}, status=status.HTTP_400_BAD_REQUEST)
-        except Post.DoesNotExist:
-            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    elif request.method == 'GET':
-        # GET 요청일 경우 관심목록에 있는 게시글 리스트를 조회합니다.
-        favorites = FavoritePost.objects.filter(user=user)
-        favorite_posts = [favorite.post for favorite in favorites]
-        post_serializer = PostSerializer(favorite_posts, many=True)
-        return Response(post_serializer.data, status=status.HTTP_200_OK)
-    
