@@ -18,6 +18,7 @@ def create_post(request):
 
 #게시판 목록
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def post_list(request):
     user = request.user
     posts = Post.objects.exclude(reports__user=user)

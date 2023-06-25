@@ -24,3 +24,11 @@ def comment_list(request):
     comments = Comment.objects.filter(user=user)
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data, status=200)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def post_list(request):
+    user = request.user
+    posts = Post.objects.exclude(reports__user=user)
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
