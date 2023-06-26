@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
         return self.create_user(phone_number, name, password,**extra_fields)
 
 class User(AbstractBaseUser):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True) #user_id
     phone_number = models.CharField(max_length=20,unique=True)
     name = models.CharField(max_length=255, unique=False)
     nickname = models.CharField(max_length=255, unique=False,blank=True)
@@ -38,7 +38,7 @@ class User(AbstractBaseUser):
 
     def has_perm(self, perm, obj=None):
         return True
-
+ 
     def has_module_perms(self, app_label):
         return True
 
@@ -52,4 +52,18 @@ class OutstandingToken(models.Model):
 
     def blacklist(self):
         BlacklistedToken.objects.create(token=self.token)
+
+class Address(models.Model):
+    address_id = models.AutoField(primary_key=True, default=0)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    disposal_location = models.CharField(max_length=255, null=True)
+    posal_code = models.IntegerField(default=0)
+    address_full_lend = models.CharField(max_length=255)
+    address_full_street = models.CharField(max_length=255)
+    address_full_district = models.CharField(max_length=255)
+    address_full_dong = models.CharField(max_length=255)
+    address_full_city = models.CharField(max_length=255)
+    
+    class Meta:
+        db_table = 'Address'
         
