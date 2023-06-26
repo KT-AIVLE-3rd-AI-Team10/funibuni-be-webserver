@@ -7,14 +7,19 @@ from ultralytics import YOLO
 from django.core.files import File
 from rest_framework.response import Response
 from .models import UrlImages
-
+from .serializers import ImageSerializer
 import boto3
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os 
 import shutil
 
+
+#def waste_apply(request):
+    
+    
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def image_upload(request):
     if 'image' in request.FILES:
         image = request.FILES['image']
@@ -37,7 +42,8 @@ def image_upload(request):
         s3_client.upload_file(file_name, 'furni', object_name)
         
         s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name}"
-        new_image = UrlImages(image_title=image.name, image_url=s3_url)
+            
+        new_image = UrlImages(image_title=image.name, image_url=s3_url, user = request.user)
         new_image.save()
         
         ######## 모델링
@@ -70,7 +76,8 @@ def image_upload(request):
                          'image_title': str(image),
                          'image_url': str(file_name),
                          'labels' : result_dict,
-                         }, status=200)
+                         'waste_id': new_image.pk,
+                         }, status=200) 
     else:
         return Response({"error": "No image found in request."}, status=400)
     

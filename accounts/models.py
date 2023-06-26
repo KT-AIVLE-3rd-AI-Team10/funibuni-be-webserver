@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
         return self.create_user(phone_number, name, password,**extra_fields)
 
 class User(AbstractBaseUser):
-    id = models.AutoField(primary_key=True) #user_id
+    id = models.AutoField(primary_key=True)
     phone_number = models.CharField(max_length=20,unique=True)
     name = models.CharField(max_length=255, unique=False)
     nickname = models.CharField(max_length=255, unique=False,blank=True)
@@ -53,6 +53,7 @@ class OutstandingToken(models.Model):
     def blacklist(self):
         BlacklistedToken.objects.create(token=self.token)
 
+'''
 class Address(models.Model):
     address_id = models.AutoField(primary_key=True, default=0)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -66,4 +67,5 @@ class Address(models.Model):
     
     class Meta:
         db_table = 'Address'
+'''
         
