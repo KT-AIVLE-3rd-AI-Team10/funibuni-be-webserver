@@ -64,10 +64,11 @@ def auto_signin(request):
                 return Response({'error': 'Token is blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
 
             # 사용자 식별 정보 얻기 (예: 사용자의 id)
-         
+            user_id= User.objects.get(id=request.user.id)  # 사용자 객체 가져오기
+            user_serializer = UserSerializer(user_id)
 
             # 새로운 액세스 토큰과 리프레시 토큰 발급
-            new_refresh = RefreshToken()  # 사용자 식별 정보를 리프레시 토큰에 포함
+            new_refresh = RefreshToken.for_user(user_id)  # 사용자 식별 정보를 리프레시 토큰에 포함
             new_access_token = str(new_refresh.access_token)
             new_refresh_token = str(new_refresh)
 
