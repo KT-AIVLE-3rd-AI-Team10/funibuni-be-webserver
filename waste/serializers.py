@@ -5,11 +5,11 @@ from django.core.files import File
 
 
 
-#class ImageUrlSerializer(serializers.ModelSerializer):
+class ImageUrlSerializer(serializers.ModelSerializer):
 
-#    class Meta:
-#        model = PreprocessedImages
-#        fields = ["image_title", "image_path"]
+    class Meta:
+        model = PreprocessedImages
+        fields = ["image_title", "image_path"]
 
         
 #모든 폐기물 품목 분류표 정보

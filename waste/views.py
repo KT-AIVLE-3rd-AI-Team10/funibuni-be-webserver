@@ -39,11 +39,16 @@ def image_upload(request):
         new_image = UrlImages(image_title=image.name, image_url=s3_url)
         new_image.save()
         
+        yolo_model = YOLO('waste/yolo/best_model/best.pt')
+        
+        #file_name = os.path.join('/', s3_url)
+        result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
+        
         default_storage.delete(path)
         
         return Response({"message": "Image uploaded successfully.",
                          'image_title': str(image),
-                         'image_url': str(s3_url),}, status=200)
+                         'image_url': str(file_name),}, status=200)
     else:
         return Response({"error": "No image found in request."}, status=400)
     
@@ -55,33 +60,3 @@ def image_modeling(request):
     serializer = PreprocessedImageSerializer(images, many=True)
     #시리얼라이즈된 데이터를 응답으로 반환합니다.
     return Response(serializer.data)'''
-
-
-# Create your views here.
-
-# views.py
-
-'''@api_view(['POST'])
-def image_modeling(request):
-    #Save the input image in the database
-    serializer = PreprocessedImageSerializer(data=request.data)
-    if serializer.is_valid():
-        wasteinfo_obj = serializer.save()
-    else:
-        return Response(serializer.errors, status=400)
-    
-    Load YOLO model
-    yolo_model = YOLO('yolo/best_model/best.pt')
-    
-    #Process the image with the YOLO model
-    processed_image_path = yolo_model.predict(source=wasteinfo_obj.input_image.path, save=True)
-
-    #Save the processed image in the database
-    wasteinfo_obj.output_image = processed_image_path
-    wasteinfo_obj.save()
-
-    #Return the processed image
-    serializer = WasteImageSerializer(wasteinfo_obj)
-    return Response(serializer.data, status=200)
-
-'''
