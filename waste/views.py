@@ -12,6 +12,7 @@ import boto3
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os 
+import shutil
 
 @api_view(['POST'])
 def image_upload(request):
@@ -39,16 +40,37 @@ def image_upload(request):
         new_image = UrlImages(image_title=image.name, image_url=s3_url)
         new_image.save()
         
+        ######## 모델링
         yolo_model = YOLO('waste/yolo/best_model/best.pt')
         
         #file_name = os.path.join('/', s3_url)
         result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
         
+        ######## 라벨, 확률 추출
+        directory_path = "runs/detect/predict/labels/"
+        result_dict = {}
+        
+        for filename in os.listdir(directory_path): 
+            if filename.endswith(".txt"):
+                with open(os.path.join(directory_path, filename), 'r') as file:
+                    lines = file.readlines()  # 파일의 모든 라인을 읽기
+
+                # 각 라인에 대해
+                for i, line in enumerate(lines, start=1):
+                    numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
+                    label = int(numbers[0])  # 리스트의 첫번째 숫자 추출
+                    probability = round(float(numbers[-1]),2)  # 리스트의 마지막 숫자 추출
+
+                    result_dict[i] = (label, probability)  # 인덱스와 (첫번째 숫자, 마지막 숫자) 튜플을 딕셔너리에 추가
+    
         default_storage.delete(path)
+        shutil.rmtree('C:/Users/User/Desktop/aivle/6m/bigproject/backend/aivle-ai-team10-be-webserver/runs')
         
         return Response({"message": "Image uploaded successfully.",
                          'image_title': str(image),
-                         'image_url': str(file_name),}, status=200)
+                         'image_url': str(file_name),
+                         'labels' : result_dict,
+                         }, status=200)
     else:
         return Response({"error": "No image found in request."}, status=400)
     
