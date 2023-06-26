@@ -23,6 +23,7 @@ class PostSerializer(serializers.ModelSerializer):
                   'product_top_category', 'product_mid_category', 'product_low_category',
                   'address_city', 'address_district', 'address_dong', 'created_at', 'is_sharing',
                   'comments_count', 'likes_count']
+
         
 class PostReportSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())

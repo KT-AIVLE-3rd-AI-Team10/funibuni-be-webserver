@@ -16,15 +16,28 @@ def create_post(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#게시판 목록
+#게시판 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def post_list(request):
-    user = request.user
-    posts = Post.objects.exclude(reports__user=user)
+    address_district = request.GET.get('address_district')
+    current_time = datetime.now()
+
+    if address_district:
+        posts = Post.objects.filter(
+            address_district__iexact=address_district,
+            expired_date__gte=current_time,
+            is_sharing=0
+        )
+    else:
+        posts = Post.objects.filter(
+            expired_date__gte=current_time,
+            is_sharing=0
+        )
+
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
-
+    
 #게시판 상세,수정,삭제
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])

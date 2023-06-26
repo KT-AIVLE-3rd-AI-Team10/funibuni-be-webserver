@@ -57,3 +57,13 @@ class OutstandingToken(models.Model):
         BlacklistedToken.objects.create(token=self.token)
 
 
+class Address(models.Model):
+    address_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    disposal_location = models.CharField(max_length=100, null=True)
+    postal_code = models.CharField(max_length=10)
+    address_road = models.CharField(max_length=100)
+    address_land = models.CharField(max_length=100)
+    address_district = models.CharField(max_length=100)
+    address_dong = models.CharField(max_length=100)
+    address_city = models.CharField(max_length=100)

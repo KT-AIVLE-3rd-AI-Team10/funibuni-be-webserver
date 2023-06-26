@@ -5,20 +5,45 @@ from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from accounts.serializers import UserSerializer
-from accounts.models import User
+from accounts.serializers import UserSerializer,AddressSerializer
+from accounts.models import User,Address
 from accounts.serializers import PhoneNumberLoginSerializer
 from accounts.models import BlacklistedToken,OutstandingToken
 from accounts.auth.authentications import JWTAuthenticationForRefresh
 from django.db import IntegrityError
 
-#회원가입
+# 회원가입
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def user_signup_view(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
+
+        # 저장할 주소 정보 추출
+        phone_number = request.data.get('phone_number')
+        name = request.data.get('name')
+        disposal_location = request.data.get('disposal_location')
+        postal_code = request.data.get('postal_code')
+        address_road = request.data.get('address_road')
+        address_land = request.data.get('address_land')
+        address_district = request.data.get('address_district')
+        address_dong = request.data.get('address_dong')
+        address_city = request.data.get('address_city')
+
+        # Address 모델에 저장
+        address = Address(
+            user=user,
+            disposal_location=disposal_location,
+            postal_code=postal_code,
+            address_road=address_road,
+            address_land=address_land,
+            address_district=address_district,
+            address_dong=address_dong,
+            address_city=address_city
+        )
+        address.save()
+
         refresh = RefreshToken.for_user(user)
         access = refresh.access_token
         return Response({
@@ -63,7 +88,7 @@ def auto_signin(request):
             if BlacklistedToken.objects.filter(token=refresh_token).exists():
                 return Response({'error': 'Token is blacklisted'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # 사용자 식별 정보 얻기 (예: 사용자의 id)
+            # 사용자 식별 정보 얻기
             user_id= User.objects.get(id=request.user.id)  # 사용자 객체 가져오기
             user_serializer = UserSerializer(user_id)
 
@@ -172,3 +197,42 @@ def user_delete_view(request):
 
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+#주소 생성 및 조회/삭제
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def address_create_view(request):
+    user = request.user
+
+    if request.method == 'GET':
+        addresses = Address.objects.filter(user=user)
+        serializer = AddressSerializer(addresses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        disposal_location = request.data.get('disposal_location')
+        postal_code = request.data.get('postal_code')
+        address_road = request.data.get('address_road')
+        address_land = request.data.get('address_land')
+        address_district = request.data.get('address_district')
+        address_dong = request.data.get('address_dong')
+        address_city = request.data.get('address_city')
+
+        address = Address(
+            user=user,
+            disposal_location=disposal_location,
+            postal_code=postal_code,
+            address_road=address_road,
+            address_land=address_land,
+            address_district=address_district,
+            address_dong=address_dong,
+            address_city=address_city
+        )
+        address.save()
+
+        return Response({'message': 'Address created successfully'}, status=status.HTTP_201_CREATED)
+
+    if request.method == 'DELETE':
+        addresses = Address.objects.filter(user=user)
+        addresses.delete()
+        return Response({'message': 'Addresses deleted successfully'}, status=status.HTTP_204_NO_CONTENT)

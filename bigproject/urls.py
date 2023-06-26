@@ -16,12 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh
+from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh,address_create_view
 from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
 from myburni.views import liked_posts,comment_list,post_list
 
 urlpatterns = [
-    #회원가입 로그인 및 로그아웃
+    #회원가입/로그인/로그아웃/주소
     path("admin/", admin.site.urls),
     path('api/user/signup', user_signup_view, name='user_signup'),
     path('api/user/signin', phone_number_login, name='phone_number_login'),
@@ -30,8 +30,8 @@ urlpatterns = [
     path('api/user/withdrawal', user_delete_view, name='user_withdrawal'),
     path('api/user/info', user_info_view, name='user_info'),
     path('api/user/token-refresh', token_refresh, name='token_refresh'),
-    
-    #게시판
+    path('api/user/address', address_create_view, name='address-create'),
+    #나눔 게시판
     path('api/posts/create', create_post, name='post_create'),
     path('api/posts/<int:post_id>', post_detail, name='post_detail'),
     path('api/posts', post_list, name='post_list'),

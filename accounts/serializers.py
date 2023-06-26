@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
+from accounts.models import User,Address
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -20,6 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
     def generate_nickname(self, name):
         nickname = name[0] + '버니'
         return nickname
+    
 class PhoneNumberLoginSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
 
@@ -28,3 +29,19 @@ class PhoneNumberTokenObtainPairView(TokenObtainPairView):
 
 class PhoneNumberTokenRefreshView(TokenRefreshView):
     pass
+
+class AddressSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user_serializer = UserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+
+        address = Address.objects.create(user=user, **validated_data)
+        return address
