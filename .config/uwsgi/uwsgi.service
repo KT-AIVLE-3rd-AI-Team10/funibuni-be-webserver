@@ -3,7 +3,7 @@ Description=uWSGI service
 After=syslog.target
 
 [Service]
-ExecStart=/home/ubuntu/kt-venv/bin/uwsgi -i /home/ubuntu/deploy/aivle-ai-team10-be-webserver/.config/uwsgi/mysite.ini
+ExecStart=/home/ubuntu/kt-venv/bin/uwsgi -i /home/ubuntu/deploy/aivle-ai-team10-be-webserver/.config/uwsgi/bigproject.ini
 
 Restart=always
 KillSignal=SIGQUIT
