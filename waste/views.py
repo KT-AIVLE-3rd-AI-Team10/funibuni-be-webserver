@@ -11,34 +11,55 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import PreprocessedImages
 from .serializers import PreprocessedImageSerializer
+import boto3
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+import os 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def image_modeling(request):
-    # 모든 이미지 객체를 가져옵니다.
-    images = PreprocessedImages.objects.all()
-    # 이미지 객체를 시리얼라이즈합니다.
-    serializer = PreprocessedImageSerializer(images, many=True)
-    # 시리얼라이즈된 데이터를 응답으로 반환합니다.
-    return Response(serializer.data)
+    if 'image' in request.FILES:
+        image = request.FILES['image']
+        path = default_storage.save(image.name, ContentFile(image.read()))
+        file_name = os.path.join('media/', image.name)
+        object_name = os.path.join('0609/', image.name)
+        # Boto3를 사용하여 S3 클라이언트를 생성합니다.
+        # 'aws_access_key_id', 'aws_secret_access_key'는
+        # 실제 AWS 접근 키와 비밀 키로 교체해야 합니다.
+        # 'region_name'도 실제 S3 버킷이 위치한 지역으로 교체해야 합니다.
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id='AKIAZ5NSLTMHIKFFE562',
+            aws_secret_access_key='YacwyT8ZiOoxuxBQTBVLQOMCFCjn4MNNnFJJqvrJ',
+            #region_name='your_region_name'
+        )
+
+        # S3에 이미지를 업로드합니다.
+        # 'your_bucket_name'은 실제 S3 버킷 이름으로 교체해야 합니다.
+        s3_client.upload_file(file_name, 'furni', object_name)
+        
+        default_storage.delete(path)
+        
+        return Response({"message": "Image uploaded successfully."}, status=200)
+    
+    else:
+        return Response({"error": "No image found in request."}, status=400)
+    
+# @api_view(['GET'])
+# def image_modeling(request):
+#     # 모든 이미지 객체를 가져옵니다.
+#     images = PreprocessedImages.objects.all()
+#     # 이미지 객체를 시리얼라이즈합니다.
+#     serializer = PreprocessedImageSerializer(images, many=True)
+#     # 시리얼라이즈된 데이터를 응답으로 반환합니다.
+#     return Response(serializer.data)
 
 
 # Create your views here.
 
 # views.py
-
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-#from .. import FileManager as fm
-
-# @csrf_exempt
-# @require_POST
-# def image_modeling(request):
-#     fm.handle_uploaded_file(request.FILES['file'])
-#     response = HttpResponse("ok")
-#     response.status_code = 200
-#     return  response
-
 
 # @api_view(['POST'])
 # def image_modeling(request):
