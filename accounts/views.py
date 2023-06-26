@@ -233,6 +233,11 @@ def address_create_view(request):
         return Response({'message': 'Address created successfully'}, status=status.HTTP_201_CREATED)
 
     if request.method == 'DELETE':
-        addresses = Address.objects.filter(user=user)
-        addresses.delete()
-        return Response({'message': 'Addresses deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        address_id = request.data.get('address_id')  
+
+        try:
+            address = Address.objects.get(address_id=address_id, user=user)
+            address.delete()
+            return Response({'message': 'Address deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except Address.DoesNotExist:
+            return Response({'message': 'Address not found'}, status=status.HTTP_404_NOT_FOUND)
