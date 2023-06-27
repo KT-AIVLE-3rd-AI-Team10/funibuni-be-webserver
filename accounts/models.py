@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, phone_number, name, password, **extra_fields):
+    def create_user(self, phone_number, name, password=None, **extra_fields):
         if not phone_number:
             raise ValueError('The phone number field must be set')
         if not name:
@@ -17,11 +17,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, phone_number, name, password, **extra_fields):
+    def create_superuser(self, phone_number, name, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(phone_number, name, password,**extra_fields)
-
+    def generate_nickname(self, name):
+        nickname = name[0] + '버니'
+        return nickname
+    
 class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     phone_number = models.CharField(max_length=20,unique=True)
@@ -53,19 +56,13 @@ class OutstandingToken(models.Model):
     def blacklist(self):
         BlacklistedToken.objects.create(token=self.token)
 
-'''
 class Address(models.Model):
-    address_id = models.AutoField(primary_key=True, default=0)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    disposal_location = models.CharField(max_length=255, null=True)
-    posal_code = models.IntegerField(default=0)
-    address_full_lend = models.CharField(max_length=255)
-    address_full_street = models.CharField(max_length=255)
-    address_full_district = models.CharField(max_length=255)
-    address_full_dong = models.CharField(max_length=255)
-    address_full_city = models.CharField(max_length=255)
-    
-    class Meta:
-        db_table = 'Address'
-'''
-        
+    address_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    disposal_location = models.CharField(max_length=100, null=True)
+    postal_code = models.CharField(max_length=10)
+    address_road = models.CharField(max_length=100)
+    address_land = models.CharField(max_length=100)
+    address_district = models.CharField(max_length=100)
+    address_dong = models.CharField(max_length=100)
+    address_city = models.CharField(max_length=100)

@@ -18,7 +18,7 @@ class Post(models.Model):
     address_dong = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     expired_date = models.DateTimeField()
-    is_sharing = models.BooleanField(default=False)
+    is_sharing = models.IntegerField(default=0)
     comments_count = models.IntegerField(default=0)
     likes_count = models.IntegerField(default=0)
     class Meta:
@@ -90,3 +90,7 @@ class ReplyReport(models.Model):
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'reply_report'
+        

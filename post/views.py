@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer
+from post.serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer
 from post.models import Post,User,PostLike,Comment,Reply,ReplyReport
 
 #게시판 생성
@@ -16,14 +16,28 @@ def create_post(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#게시판 목록
+#게시판 리스트
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def post_list(request):
-    user = request.user
-    posts = Post.objects.exclude(reports__user=user)
+    address_district = request.GET.get('address_district')
+    current_time = datetime.now()
+
+    if address_district:
+        posts = Post.objects.filter(
+            address_district__iexact=address_district,
+            expired_date__gte=current_time,
+            is_sharing=0
+        )
+    else:
+        posts = Post.objects.filter(
+            expired_date__gte=current_time,
+            is_sharing=0
+        )
+
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
-
+    
 #게시판 상세,수정,삭제
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -70,9 +84,9 @@ def create_postreport(request, post_id):
     except Post.DoesNotExist:
         return Response({'error': '게시물을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = PostReportSerializer(data=request.data)
+    serializer = PostReportSerializer(data=request.data, context={'request': request})  # context 인자 추가
     if serializer.is_valid():
-        serializer.save(user=request.user, post=post)
+        serializer.save(user_id=request.user.id, post_id=post_id)  # user_id, post_id 필드에 직접 값을 전달
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -141,6 +155,7 @@ def comment_detail(request, post_id, comment_id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#댓글 신고
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def comment_report(request,post_id, comment_id):
@@ -149,13 +164,14 @@ def comment_report(request,post_id, comment_id):
     except Comment.DoesNotExist:
         return Response({'error': '댓글을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = CommentReportSerializer(data=request.data)
+    serializer = CommentReportSerializer(data=request.data, context={'request': request})  # context 인자 추가
     if serializer.is_valid():
         serializer.save(user=request.user, comment=comment)
-        return Response({'comment_id': comment_id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#대댓글 작성
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def create_reply(request, post_id, comment_id):
@@ -177,6 +193,7 @@ def create_reply(request, post_id, comment_id):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#대댓글 수정,삭제
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def reply_detail(request, post_id, comment_id, reply_id):
@@ -200,7 +217,8 @@ def reply_detail(request, post_id, comment_id, reply_id):
     elif request.method == 'DELETE':
         reply.delete()
         return Response({'comment_id': comment_id}, status=status.HTTP_204_NO_CONTENT)
-    
+
+#대댓글 신고
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def reply_report(request, post_id, comment_id, reply_id):
@@ -215,8 +233,13 @@ def reply_report(request, post_id, comment_id, reply_id):
         return Response({'error': '대댓글을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
     # 대댓글을 신고한 사용자와 현재 인증된 사용자가 동일한 경우, 대댓글을 숨김
-    if reply.reports.filter(user=request.user).exists():
+    if ReplyReport.objects.filter(reply=reply, user=request.user).exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = ReplySerializer(reply, context={'request': request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer = ReplyReportSerializer(data=request.data, context={'request': request})
+    if serializer.is_valid():
+        serializer.save(reply=reply, user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
