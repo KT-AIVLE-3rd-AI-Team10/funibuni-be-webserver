@@ -23,3 +23,17 @@ class UrlImages(models.Model):
     
     class Meta:
         db_table = "url_images"
+
+#폐기물 품목 분류표
+class WasteSpec(models.Model):
+    waste_spec_id = models.AutoField(primary_key=True)
+    index_large_category = models.IntegerField()
+    city = models.CharField(max_length=50)
+    district = models.CharField(max_length=50)
+    top_category = models.CharField(max_length=50)
+    large_category = models.CharField(max_length=50)
+    small_category = models.CharField(max_length=50)
+    size_range = models.CharField(max_length=50, null=True)  # assuming size_range is a string
+    is_exists_small_cat_model = models.BooleanField(default=True)
+    type = models.CharField(max_length=50)
+    fee = models.IntegerField()

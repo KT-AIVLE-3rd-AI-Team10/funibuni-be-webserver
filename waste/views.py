@@ -6,7 +6,7 @@ import ultralytics
 from ultralytics import YOLO
 from django.core.files import File
 from rest_framework.response import Response
-from .models import UrlImages
+from .models import UrlImages, WasteSpec
 import boto3
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -14,8 +14,35 @@ import os
 import shutil
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .serializers import UrlImagesSerializer
+from .serializers import UrlImagesSerializer, WasteSpecSerializer
 from django.utils import timezone
+import pandas as pd
+
+@api_view(['POST'])
+def waste_songpa(request):
+    #WasteSpec.objects.all().delete()
+    df = pd.read_excel('waste/대형폐기물분류표_송파구.xlsx', sheet_name='퍼니버니', engine='openpyxl')
+    
+    for index, row in df.iterrows():
+        waste_spec = WasteSpec(
+            waste_spec_id = index,
+            index_large_category=row['index_large_category'],
+            city='서울',
+            district='송파구',
+            top_category=row['top_category'],
+            large_category=row['large_category'],
+            small_category=row['small_category'],
+            size_range=row['size_range'],
+            is_exists_small_cat_model=row['is_exists_small_cat_model'],
+            type=row['type'],
+            fee=row['fee'],
+        )
+        waste_spec.save()
+
+    waste_spec_objects = WasteSpec.objects.all()
+    serializer = WasteSpecSerializer(waste_spec_objects, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['PATCH'])
 def waste_apply(request):
