@@ -4,8 +4,8 @@ from accounts.serializers import UserSerializer
 from django.db import models
 
 class PostSerializer(serializers.ModelSerializer):
-    is_sharing = serializers.IntegerField(default=0)  # 기본값으로 0 설정
-    user = serializers.SerializerMethodField()
+    # is_sharing = serializers.IntegerField(default=0)  # 기본값으로 0 설정
+    # user = serializers.SerializerMethodField()
     def get_comments_count(self, obj):
         return obj.comments.count()
 
