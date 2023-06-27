@@ -27,6 +27,7 @@ def waste_songpa(request):
         waste_spec = WasteSpec(
             waste_spec_id = index,
             index_large_category=row['index_large_category'],
+            index_small_category=row['index_small_category'],
             city='서울',
             district='송파구',
             top_category=row['top_category'],
@@ -47,13 +48,16 @@ def waste_songpa(request):
 @api_view(['PATCH'])
 def waste_apply(request):
     waste_id = request.data.get('waste_id')
-    if waste_id is None:
-        return Response({"error": "No waste_id provided."}, status=400)
+    waste_spec_id = request.data.get('waste_spec_id')  # Get waste_spec_id from the request
+    if waste_id is None or waste_spec_id is None:
+        return Response({"error": "No waste_id or waste_spec_id provided."}, status=400)
     try:
         urlimages = UrlImages.objects.get(waste_id=waste_id)
-    except UrlImages.DoesNotExist:
+        waste_spec = WasteSpec.objects.get(waste_spec_id=waste_spec_id)  # Get WasteSpec object with the provided id
+    except (UrlImages.DoesNotExist, WasteSpec.DoesNotExist):  # Catch the exception if either object does not exist
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    urlimages.waste_spec_id = waste_spec  # Assign the WasteSpec object, not just the id
     urlimages.apply_binary = 1
     urlimages.postal_code = request.data.get('postal_code')
     urlimages.address_full_lend = request.data.get('address_full_lend')
@@ -64,9 +68,10 @@ def waste_apply(request):
     urlimages.disposal_datetime = timezone.now()
     urlimages.memo = request.data.get('memo')
     urlimages.save()
-
+    
     serializer = UrlImagesSerializer(urlimages)
     return Response(serializer.data)
+
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -167,8 +172,8 @@ def image_upload(request):
         result_dict = parse_file()
         
         cwd = os.getcwd()
-        parent_dir = os.path.dirname(cwd)
-        path_to_remove = os.path.join(parent_dir, 'runs')
+        #parent_dir = os.path.dirname(cwd)
+        path_to_remove = os.path.join(cwd, 'runs')
         shutil.rmtree(path_to_remove)
         
         default_storage.delete(path)
