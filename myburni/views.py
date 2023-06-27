@@ -5,6 +5,19 @@ from rest_framework import status
 from post.models import Post, PostLike,Comment
 from post.serializers import PostSerializer, PostLikeSerializer,CommentSerializer
 
+#나눔 내역 리스트
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def post_list(request):
+    user = request.user
+    posts = Post.objects.exclude(reports__user=user)
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+
+
+
+#관심 목록 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def liked_posts(request):
@@ -15,6 +28,7 @@ def liked_posts(request):
     post_serializer = PostSerializer(posts, many=True)
     return Response(post_serializer.data, status=status.HTTP_200_OK)
 
+#활동 내역 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def comment_list(request):
@@ -25,10 +39,3 @@ def comment_list(request):
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data, status=200)
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def post_list(request):
-    user = request.user
-    posts = Post.objects.exclude(reports__user=user)
-    serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)

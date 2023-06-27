@@ -20,20 +20,11 @@ def create_post(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def post_list(request):
-    address_district = request.GET.get('address_district')
-    current_time = datetime.now()
+    district = request.GET.get('address_district')  # 쿼리 매개변수에서 자치구 값을 가져옴
 
-    if address_district:
-        posts = Post.objects.filter(
-            address_district__iexact=address_district,
-            expired_date__gte=current_time,
-            is_sharing=0
-        )
-    else:
-        posts = Post.objects.filter(
-            expired_date__gte=current_time,
-            is_sharing=0
-        )
+    posts = Post.objects.all()
+    if district:
+        posts = posts.filter(address__address_district=district)  # 주소의 자치구를 기준으로 게시물 필터링
 
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
