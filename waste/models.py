@@ -11,14 +11,7 @@ class UrlImages(models.Model):
     image_title = models.TextField(null=True, default="testt.jpg")
     image_url = models.TextField(null=False, default="media/testt.jpg") #FilePathField
     #image_context = models.TextField(null=False, default="일방통행")
- 
-    class Meta:
-        db_table = "url_images"
-'''
-class WasteInfo(models.Model):
-    #_id = models.ObjectIdField()
-    Waste_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    apply_binary = models.IntegerField(default=0)
     postal_code = models.CharField(max_length=255, null=True)
     address_full_lend = models.CharField(max_length=255, null=True)
     address_full_street = models.CharField(max_length=255, null=True)
@@ -27,10 +20,6 @@ class WasteInfo(models.Model):
     disposal_location = models.CharField(max_length=255, null=True)
     disposal_datetime = models.CharField(max_length=255, null=True)
     memo = models.CharField(max_length=255, null=True)
-    image_title = models.TextField(null=True, default="testt.jpg")
-    image_url = models.FilePathField(null=False, default="media/testt.jpg")
-    #image_context = models.TextField(null=False, default="일방통행")
-
+    
     class Meta:
-        db_table = "WasteInfo"
-        '''
+        db_table = "url_images"

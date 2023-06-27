@@ -4,15 +4,11 @@ from .models import UrlImages
 from django.core.files import File
 
 
-
-class ImageSerializer(serializers.ModelSerializer):
-    #user = serializers.SerializerMethodField(read_only=True)
-    waste_id = serializers.PrimaryKeyRelatedField(read_only=True)
-
+class UrlImagesSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = UrlImages
-        fields = ['waste_id', 'image_title', 'image_url'] #'user', 
-    
+        fields = '__all__'  # 모든 필드를 serialize
         
 #모든 폐기물 품목 분류표 정보
 

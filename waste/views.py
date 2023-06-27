@@ -7,16 +7,39 @@ from ultralytics import YOLO
 from django.core.files import File
 from rest_framework.response import Response
 from .models import UrlImages
-from .serializers import ImageSerializer
 import boto3
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os 
 import shutil
+from rest_framework.decorators import api_view
+from rest_framework import status
+from .serializers import UrlImagesSerializer
+from django.utils import timezone
 
+@api_view(['PATCH'])
+def waste_apply(request):
+    waste_id = request.data.get('waste_id')
+    if waste_id is None:
+        return Response({"error": "No waste_id provided."}, status=400)
+    try:
+        urlimages = UrlImages.objects.get(waste_id=waste_id)
+    except UrlImages.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-#def waste_apply(request):
-    
+    urlimages.apply_binary = 1
+    urlimages.postal_code = request.data.get('postal_code')
+    urlimages.address_full_lend = request.data.get('address_full_lend')
+    urlimages.address_full_street = request.data.get('address_full_street')
+    urlimages.address_city = request.data.get('address_city')
+    urlimages.address_district = request.data.get('address_district')
+    urlimages.disposal_location = request.data.get('disposal_location')
+    urlimages.disposal_datetime = timezone.now()
+    urlimages.memo = request.data.get('memo')
+    urlimages.save()
+
+    serializer = UrlImagesSerializer(urlimages)
+    return Response(serializer.data)
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -42,7 +65,8 @@ def image_upload(request):
         s3_client.upload_file(file_name, 'furni', object_name)
         
         s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name}"
-            
+        
+        #user = User.objects.get(id=request.user.id)
         new_image = UrlImages(image_title=image.name, image_url=s3_url, user = request.user)
         new_image.save()
         
@@ -77,6 +101,7 @@ def image_upload(request):
                          'image_url': str(file_name),
                          'labels' : result_dict,
                          'waste_id': new_image.pk,
+                         'user' : request.user.id,
                          }, status=200) 
     else:
         return Response({"error": "No image found in request."}, status=400)
