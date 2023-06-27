@@ -98,46 +98,87 @@ def image_upload(request):
         new_image.save()
         
         ######## 모델링
-        yolo_model = YOLO('waste/yolo/best_model/best.pt')
+        yolo_model = YOLO('waste/yolo/large_best_model/best.pt')
         
         #file_name = os.path.join('/', s3_url)
         result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
         
         ######## 라벨, 확률 추출
         directory_path = "runs/detect/predict/labels/"
-        result_dict = {}
+        directory_path2 = "runs/detect/predict2/labels/"
         
-        for filename in os.listdir(directory_path): 
-            if filename.endswith(".txt"):
-                with open(os.path.join(directory_path, filename), 'r') as file:
-                    lines = file.readlines()  # 파일의 모든 라인을 읽기
+        def parse_file():
+            for filename in os.listdir(directory_path): 
+                if filename.endswith(".txt"):
+                    with open(os.path.join(directory_path, filename), 'r') as file:
+                        lines = file.readlines()  # 파일의 모든 라인을 읽기
+                        for line in lines:
+                            numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
+                            label = int(numbers[0])  # 리스트의 첫번째 숫자 추출
+                            probability = round(float(numbers[-1]),2)  # 리스트의 마지막 숫자 추출
 
-                # 각 라인에 대해
-                for i, line in enumerate(lines, start=1):
-                    numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
-                    label = int(numbers[0])  # 리스트의 첫번째 숫자 추출
-                    probability = round(float(numbers[-1]),2)  # 리스트의 마지막 숫자 추출
+                            result_dict= {
+                                "large-category": {
+                                    "name" : label,
+                                    "probability" : probability
+                                },
+                                "small-category": []
+                                }
+                            
+            # 의자 모델링!
+            if label == 0:
+                yolo_model = YOLO('waste/yolo/chair_best_model/best.pt')
+                result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
+        
+                for filename in os.listdir(directory_path2): 
+                    if filename.endswith(".txt"):
+                        with open(os.path.join(directory_path2, filename), 'r') as file:
+                            lines = file.readlines()  # 파일의 모든 라인을 읽기
+                            for line in lines:
+                                small_numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
+                                small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
+                                small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
 
-                    result_dict[i] = (label, probability)  # 인덱스와 (첫번째 숫자, 마지막 숫자) 튜플을 딕셔너리에 추가
-    
+                                result_dict["small-category"] = {
+                                        "name" : small_label,
+                                        "probability" : small_probability
+                                    }
+                                                
+                        # 자전거 모델링!
+            if label == 2: 
+                yolo_model = YOLO('waste/yolo/bicycle_best_model/best.pt')
+                result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
+        
+                for filename in os.listdir(directory_path2): 
+                    if filename.endswith(".txt"):
+                        with open(os.path.join(directory_path2, filename), 'r') as file:
+                            lines = file.readlines()  # 파일의 모든 라인을 읽기
+                            for line in lines:
+                                small_numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
+                                small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
+                                small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
+
+                                result_dict["small-category"] = {
+                                        "name" : small_label,
+                                        "probability" : small_probability
+                                    }    
+            return result_dict
+            
+        result_dict = parse_file()
+        
+        cwd = os.getcwd()
+        parent_dir = os.path.dirname(cwd)
+        path_to_remove = os.path.join(parent_dir, 'runs')
+        shutil.rmtree(path_to_remove)
+        
         default_storage.delete(path)
-        shutil.rmtree('C:/Users/User/Desktop/aivle/6m/bigproject/backend/aivle-ai-team10-be-webserver/runs')
-        
+
         return Response({"message": "Image uploaded successfully.",
                          'image_title': str(image),
-                         'image_url': str(file_name),
+                         'image_url': str(s3_url),
                          'labels' : result_dict,
                          'waste_id': new_image.pk,
                          'user' : request.user.id,
                          }, status=200) 
     else:
         return Response({"error": "No image found in request."}, status=400)
-    
-'''@api_view(['GET'])
-def image_modeling(request):
-    # 모든 이미지 객체를 가져옵니다.
-    images = PreprocessedImages.objects.all()
-    #이미지 객체를 시리얼라이즈합니다.
-    serializer = PreprocessedImageSerializer(images, many=True)
-    #시리얼라이즈된 데이터를 응답으로 반환합니다.
-    return Response(serializer.data)'''
