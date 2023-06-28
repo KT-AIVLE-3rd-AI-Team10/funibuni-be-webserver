@@ -78,6 +78,8 @@ def waste_apply(request):
     urlimages.address_city = request.data.get('address_city')
     urlimages.address_district = request.data.get('address_district')
     urlimages.disposal_location = request.data.get('disposal_location')
+    urlimages.address_dong = request.data.get('address_dong')
+    urlimages.address_detail = request.data.get('address_detail') 
     urlimages.disposal_datetime = timezone.now()
     urlimages.memo = request.data.get('memo')
     urlimages.save()

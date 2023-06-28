@@ -36,6 +36,8 @@ class UrlImages(models.Model):
     address_full_street = models.CharField(max_length=255, null=True)
     address_city = models.CharField(max_length=255, null=True)
     address_district = models.CharField(max_length=255, null=True)
+    address_dong = models.CharField(max_length=255, null=True)
+    address_detail = models.CharField(max_length=255, null=True)
     disposal_location = models.CharField(max_length=255, null=True)
     disposal_datetime = models.CharField(max_length=255, null=True)
     memo = models.CharField(max_length=255, null=True)
