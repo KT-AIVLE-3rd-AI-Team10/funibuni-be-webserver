@@ -182,12 +182,14 @@ def image_upload(request):
         #폐기물 분류 표 반환
         large_waste_specs = WasteSpec.objects.filter(index_large_category=label) 
         large_serializer = WasteSpecSerializer(large_waste_specs, many=True)
+        large_category_name = large_waste_specs.values_list('large_category', flat=True).first()
         
         all_waste_specs = WasteSpec.objects.all()
         all_serializer = WasteSpecSerializer(all_waste_specs, many=True)
         
         return Response({'image_title': str(image),
                          'image_url': str(s3_url),
+                         'large_category_name' : large_category_name,
                          'labels' : result_dict,
                          'waste_id': new_image.pk,
                          'user' : request.user.id,
