@@ -129,10 +129,12 @@ def image_upload(request):
                                 continue
                             # 라벨을 처리된 라벨 집합에 추가한다.
                             handled_labels.add(label)
-                            
+                            temp_waste_specs = WasteSpec.objects.filter(index_large_category=label) 
+                            temp_category_name = temp_waste_specs.values_list('large_category', flat=True).first()
                             result_dict= {
                                 "large-category": {
                                     "index_large_category" : label,
+                                    "large_category_name" : temp_category_name,
                                     "probability" : probability
                                 },
                                 "small-category": []
@@ -154,9 +156,12 @@ def image_upload(request):
                                 small_numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
                                 small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
-
+                                temp_waste_specs = WasteSpec.objects.filter(index_small_category=small_label) 
+                                temp_category_name = temp_waste_specs.values_list('small_category', flat=True).first()
+                            
                                 results[0]["small-category"] = {
                                         "index_small_category" : small_label,
+                                        "small_category_name" : temp_category_name,
                                         "probability" : small_probability
                                     }
                                 continue
@@ -174,11 +179,14 @@ def image_upload(request):
                                 small_numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
                                 small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
-
+                                temp_waste_specs = WasteSpec.objects.filter(index_small_category=small_label) 
+                                temp_category_name = temp_waste_specs.values_list('small_category', flat=True).first()
+                            
                                 results[0]["small-category"] = {
                                         "index_small_category" : small_label,
+                                        "small_category_name" : temp_category_name,
                                         "probability" : small_probability
-                                    }    
+                                    }
                                 continue
                                 
             
@@ -206,11 +214,11 @@ def image_upload(request):
         
         return Response({'image_title': str(image),
                          'image_url': str(s3_url),
-                         'large_category_name' : large_category_name,
+                         'first_large_category_name' : large_category_name,
                          'labels' : results,
                          'waste_id': new_image.pk,
                          'user' : request.user.id,
-                         'large_category_waste_specs' : large_serializer.data,
+                         'first_large_category_waste_specs' : large_serializer.data,
                          'all_waste_specs' : all_serializer.data
                          }, status=200) 
     else:
