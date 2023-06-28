@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from accounts.views import user_signup_view, phone_number_login, user_logout_view, user_delete_view, user_info_view,auto_signin,token_refresh,address_create_view
 from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
-from waste.views import image_upload, waste_apply, waste_songpa
+from waste.views import image_upload, waste_apply, waste_songpa, waste_detail
 from myburni.views import liked_posts,comment_list,post_list
 # from reports.views import report_post
 # from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
@@ -53,7 +53,7 @@ urlpatterns = [
     path('api/waste/image-upload', image_upload, name='image_upload'),
     path('api/waste/apply', waste_apply, name='waste_apply'),
     path('api/waste/table', waste_songpa, name='waste_songpa'),
-    path('api/waste/table/<int:post_id>/', waste_songpa, name='waste_songpa'),
+    path('api/waste/apply/<int:waste_id>/', waste_detail, name='waste_detail'),
     
     #나의버니
     path('api/myburni/like-posts',liked_posts, name='like_posts'),

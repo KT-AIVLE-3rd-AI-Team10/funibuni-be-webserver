@@ -176,3 +176,5 @@ cython_debug/
 
 # 마이그레이션 무시
 */migrations/
+*/migrations/*
+!*/migrations/__init__.py
