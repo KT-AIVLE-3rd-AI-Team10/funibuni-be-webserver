@@ -186,13 +186,15 @@ def image_upload(request):
             
         label, results = parse_file()
         
+        ## 서버에 남은 불필요한 파일 삭제
         cwd = os.getcwd()
         #parent_dir = os.path.dirname(cwd)
         path_to_remove = os.path.join(cwd, 'runs')
-        #shutil.rmtree(path_to_remove)
-        
+        shutil.rmtree(path_to_remove)
         default_storage.delete(path) 
-
+        image_to_remove = os.path.join(cwd, image_name)
+        os.remove(image_to_remove)
+        
         #폐기물 분류 표 반환
         large_waste_specs = WasteSpec.objects.filter(index_large_category=label) 
         large_serializer = WasteSpecSerializer(large_waste_specs, many=True)
@@ -200,6 +202,7 @@ def image_upload(request):
         
         all_waste_specs = WasteSpec.objects.all()
         all_serializer = WasteSpecSerializer(all_waste_specs, many=True)
+        
         
         return Response({'image_title': str(image),
                          'image_url': str(s3_url),
