@@ -66,3 +66,4 @@ class Address(models.Model):
     address_district = models.CharField(max_length=100)
     address_dong = models.CharField(max_length=100)
     address_city = models.CharField(max_length=100)
+    address_detail = models.CharField(max_length=100)

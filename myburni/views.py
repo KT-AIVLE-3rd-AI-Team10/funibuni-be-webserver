@@ -14,9 +14,6 @@ def post_list(request):
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
-
-
-
 #관심 목록 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
