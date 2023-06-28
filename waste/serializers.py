@@ -1,6 +1,7 @@
 import base64
 from rest_framework import serializers
 from .models import UrlImages, WasteSpec
+from accounts.models import User
 from django.core.files import File
 from accounts.serializers import UserSerializer
 
@@ -16,8 +17,13 @@ class WasteSpecSerializer(serializers.ModelSerializer):
         model = WasteSpec
         fields = '__all__'  # 모든 필드를 serialize
 
+class UserSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'phone_number', 'name','nickname')
+        
 class WasteDisposalApplySerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True) 
+    user = UserSerializer2(read_only=True) 
     waste_spec_id = WasteSpecSerializer(read_only=True)
     class Meta:
         model = UrlImages
