@@ -30,6 +30,7 @@ def user_signup_view(request):
         address_district = request.data.get('address_district')
         address_dong = request.data.get('address_dong')
         address_city = request.data.get('address_city')
+        address_detail = request.data.get('address_detail')
 
         # Address 모델에 저장
         address = Address(
@@ -40,15 +41,18 @@ def user_signup_view(request):
             address_land=address_land,
             address_district=address_district,
             address_dong=address_dong,
-            address_city=address_city
+            address_city=address_city,
+            address_detail=address_detail
         )
         address.save()
 
         refresh = RefreshToken.for_user(user)
         access = refresh.access_token
+        address_serializer = AddressSerializer(address)
         return Response({
             'access_token': str(access),
-            'refresh_token': str(refresh)
+            'refresh_token': str(refresh),
+            'address': address_serializer.data  # 주소 정보를 응답에 포함
         }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
