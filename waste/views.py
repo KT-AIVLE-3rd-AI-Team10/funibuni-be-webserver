@@ -112,6 +112,7 @@ def image_upload(request):
         directory_path = "runs/detect/predict/labels/"
         directory_path2 = "runs/detect/predict2/labels/"
         
+        
         def parse_file():
             for filename in os.listdir(directory_path): 
                 if filename.endswith(".txt"):
@@ -124,7 +125,7 @@ def image_upload(request):
 
                             result_dict= {
                                 "large-category": {
-                                    "name" : label,
+                                    "index_large_category" : label,
                                     "probability" : probability
                                 },
                                 "small-category": []
@@ -145,7 +146,7 @@ def image_upload(request):
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
 
                                 result_dict["small-category"] = {
-                                        "name" : small_label,
+                                        "index_small_category" : small_label,
                                         "probability" : small_probability
                                     }
                                                 
@@ -164,26 +165,34 @@ def image_upload(request):
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
 
                                 result_dict["small-category"] = {
-                                        "name" : small_label,
+                                        "index_small_category" : small_label,
                                         "probability" : small_probability
                                     }    
-            return result_dict
+            return label, result_dict
             
-        result_dict = parse_file()
+        label, result_dict = parse_file()
         
         cwd = os.getcwd()
         #parent_dir = os.path.dirname(cwd)
         path_to_remove = os.path.join(cwd, 'runs')
         shutil.rmtree(path_to_remove)
         
-        default_storage.delete(path)
+        default_storage.delete(path) 
 
-        return Response({"message": "Image uploaded successfully.",
-                         'image_title': str(image),
+        #폐기물 분류 표 반환
+        large_waste_specs = WasteSpec.objects.filter(index_large_category=label) 
+        large_serializer = WasteSpecSerializer(large_waste_specs, many=True)
+        
+        all_waste_specs = WasteSpec.objects.all()
+        all_serializer = WasteSpecSerializer(all_waste_specs, many=True)
+        
+        return Response({'image_title': str(image),
                          'image_url': str(s3_url),
                          'labels' : result_dict,
                          'waste_id': new_image.pk,
                          'user' : request.user.id,
+                         'large_category_waste_specs' : large_serializer.data,
+                         'all_waste_specs' : all_serializer.data
                          }, status=200) 
     else:
         return Response({"error": "No image found in request."}, status=400)
