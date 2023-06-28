@@ -14,11 +14,23 @@ import os
 import shutil
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .serializers import UrlImagesSerializer, WasteSpecSerializer
+from .serializers import UrlImagesSerializer, WasteSpecSerializer, WasteDisposalApplySerializer
 from django.utils import timezone
 import pandas as pd
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def waste_detail(request, waste_id):
+    try:
+        waste = UrlImages.objects.get(waste_id=waste_id)
+        serializer = WasteDisposalApplySerializer(waste)
+        return Response(serializer.data)
+    except UrlImages.DoesNotExist:
+        return Response({"error": "Detail not found"}, status=404)
+    
+    
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def waste_songpa(request):
     #WasteSpec.objects.all().delete()
     df = pd.read_excel('waste/대형폐기물분류표_송파구.xlsx', sheet_name='퍼니버니', engine='openpyxl')
@@ -46,6 +58,7 @@ def waste_songpa(request):
 
 
 @api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
 def waste_apply(request):
     waste_id = request.data.get('waste_id')
     waste_spec_id = request.data.get('waste_spec_id')  # Get waste_spec_id from the request
