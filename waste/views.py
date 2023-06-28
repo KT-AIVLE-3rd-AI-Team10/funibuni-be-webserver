@@ -78,9 +78,10 @@ def waste_apply(request):
 def image_upload(request):
     if 'image' in request.FILES:
         image = request.FILES['image']
-        path = default_storage.save(image.name, ContentFile(image.read()))
-        file_name = os.path.join('media/', image.name)
-        object_name = os.path.join('django/', image.name)
+        image_name = image.name.replace('jfif', 'png')
+        path = default_storage.save(image_name, ContentFile(image.read()))
+        file_name = os.path.join('media/', image_name)
+        object_name = os.path.join('django/', image_name)
         # Boto3를 사용하여 S3 클라이언트를 생성합니다.
         # 'aws_access_key_id', 'aws_secret_access_key'는
         # 실제 AWS 접근 키와 비밀 키로 교체해야 합니다.
@@ -95,18 +96,17 @@ def image_upload(request):
         # S3에 이미지를 업로드합니다.
         # 'your_bucket_name'은 실제 S3 버킷 이름으로 교체해야 합니다.
         s3_client.upload_file(file_name, 'furni', object_name)
-        
-        s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name}"
+        s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name.replace(' ', '+')}"
         
         #user = User.objects.get(id=request.user.id)
-        new_image = UrlImages(image_title=image.name, image_url=s3_url, user = request.user)
+        new_image = UrlImages(image_title=image_name, image_url=s3_url, user = request.user)
         new_image.save()
         
         ######## 모델링
         yolo_model = YOLO('waste/yolo/large_best_model/best.pt')
         
         #file_name = os.path.join('/', s3_url)
-        result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
+        result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.1) 
         
         ######## 라벨, 확률 추출
         directory_path = "runs/detect/predict/labels/"
@@ -114,6 +114,8 @@ def image_upload(request):
         
         
         def parse_file():
+            handled_labels = set()  # 이미 처리된 라벨을 추적하는 집합
+            results = []  # 결과를 저장하는 리스트
             for filename in os.listdir(directory_path): 
                 if filename.endswith(".txt"):
                     with open(os.path.join(directory_path, filename), 'r') as file:
@@ -122,7 +124,12 @@ def image_upload(request):
                             numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
                             label = int(numbers[0])  # 리스트의 첫번째 숫자 추출
                             probability = round(float(numbers[-1]),2)  # 리스트의 마지막 숫자 추출
-
+                            # 라벨이 이미 처리되었다면 건너뛴다.
+                            if label in handled_labels:
+                                continue
+                            # 라벨을 처리된 라벨 집합에 추가한다.
+                            handled_labels.add(label)
+                            
                             result_dict= {
                                 "large-category": {
                                     "index_large_category" : label,
@@ -130,9 +137,12 @@ def image_upload(request):
                                 },
                                 "small-category": []
                                 }
+                            results.append(result_dict)
                             
+            first_label = list(handled_labels)[0]
             # 의자 모델링!
-            if label == 0:
+            
+            if first_label == 0:
                 yolo_model = YOLO('waste/yolo/chair_best_model/best.pt')
                 result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
         
@@ -145,13 +155,14 @@ def image_upload(request):
                                 small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
 
-                                result_dict["small-category"] = {
+                                results[0]["small-category"] = {
                                         "index_small_category" : small_label,
                                         "probability" : small_probability
                                     }
+                                continue
                                                 
-                        # 자전거 모델링!
-            if label == 2: 
+            # 자전거 모델링!
+            if first_label == 2: 
                 yolo_model = YOLO('waste/yolo/bicycle_best_model/best.pt')
                 result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
         
@@ -164,18 +175,21 @@ def image_upload(request):
                                 small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
 
-                                result_dict["small-category"] = {
+                                results[0]["small-category"] = {
                                         "index_small_category" : small_label,
                                         "probability" : small_probability
                                     }    
-            return label, result_dict
+                                continue
+                                
             
-        label, result_dict = parse_file()
+            return first_label, results
+            
+        label, results = parse_file()
         
         cwd = os.getcwd()
         #parent_dir = os.path.dirname(cwd)
         path_to_remove = os.path.join(cwd, 'runs')
-        shutil.rmtree(path_to_remove)
+        #shutil.rmtree(path_to_remove)
         
         default_storage.delete(path) 
 
@@ -190,7 +204,7 @@ def image_upload(request):
         return Response({'image_title': str(image),
                          'image_url': str(s3_url),
                          'large_category_name' : large_category_name,
-                         'labels' : result_dict,
+                         'labels' : results,
                          'waste_id': new_image.pk,
                          'user' : request.user.id,
                          'large_category_waste_specs' : large_serializer.data,
