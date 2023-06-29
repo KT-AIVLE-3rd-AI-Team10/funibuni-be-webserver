@@ -17,6 +17,7 @@ from rest_framework import status
 from .serializers import UrlImagesSerializer, WasteSpecSerializer, WasteDisposalApplySerializer
 from django.utils import timezone
 import pandas as pd
+import json
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -87,7 +88,6 @@ def waste_apply(request):
     serializer = UrlImagesSerializer(urlimages)
     return Response(serializer.data)
 
-    
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def image_upload(request):
@@ -101,11 +101,14 @@ def image_upload(request):
         # 'aws_access_key_id', 'aws_secret_access_key'는
         # 실제 AWS 접근 키와 비밀 키로 교체해야 합니다.
         # 'region_name'도 실제 S3 버킷이 위치한 지역으로 교체해야 합니다.
-        s3_client = boto3.client(
+        with open('secrets.json') as f:
+            secrets = json.load(f)
+            
+        s3_client = boto3.client( 
             's3',
-            aws_access_key_id='AKIAZ5NSLTMHIKFFE562',
-            aws_secret_access_key='YacwyT8ZiOoxuxBQTBVLQOMCFCjn4MNNnFJJqvrJ',
-            #region_name='your_region_name'
+            aws_access_key_id= secrets['AWS_ACCESS_KEY_ID'],
+            aws_secret_access_key= secrets['AWS_SECRET_ACCESS_KEY']
+            #region_name='your_region_name' 
         )
 
         # S3에 이미지를 업로드합니다.
