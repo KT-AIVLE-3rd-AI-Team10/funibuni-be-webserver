@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from accounts.models import User,Address
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from accounts.models import User,Address
 
 
 

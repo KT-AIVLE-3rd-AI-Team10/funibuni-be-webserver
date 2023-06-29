@@ -181,6 +181,8 @@ def user_logout_view(request):
 #             return Response(serializer.data, status=status.HTTP_200_OK)
 
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#정보 확인 및 업데이트
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def user_info_view(request):

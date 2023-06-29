@@ -1,24 +1,24 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-
-import ultralytics
-from ultralytics import YOLO
-from django.core.files import File
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import UrlImages, WasteSpec
-import boto3
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from django.core.files import File
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.utils import timezone
+from ultralytics import YOLO
+from .models import UrlImages, WasteSpec
+from .serializers import UrlImagesSerializer, WasteSpecSerializer, WasteDisposalApplySerializer
+import ultralytics
+import boto3
 import os 
 import shutil
-from rest_framework.decorators import api_view
-from rest_framework import status
-from .serializers import UrlImagesSerializer, WasteSpecSerializer, WasteDisposalApplySerializer
-from django.utils import timezone
 import pandas as pd
 import json
 
+#상세보기
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def waste_detail(request, waste_id):
@@ -29,7 +29,7 @@ def waste_detail(request, waste_id):
     except UrlImages.DoesNotExist:
         return Response({"error": "Detail not found"}, status=404)
     
-    
+#대형폐기물 분류표
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def waste_songpa(request):
@@ -57,7 +57,7 @@ def waste_songpa(request):
     serializer = WasteSpecSerializer(waste_spec_objects, many=True)
     return Response(serializer.data)
 
-
+#배출 신청
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def waste_apply(request):
@@ -89,6 +89,7 @@ def waste_apply(request):
     serializer = UrlImagesSerializer(urlimages)
     return Response(serializer.data)
 
+#이미지업로드
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def image_upload(request):

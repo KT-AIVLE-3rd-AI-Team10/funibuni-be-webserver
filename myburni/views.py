@@ -15,6 +15,7 @@ from myburni.serializers import burniSerializer
 #     posts = Post.objects.exclude(reports__user=user)
 #     serializer = PostSerializer(posts, many=True)
 #     return Response(serializer.data)
+
 #나의 버니 탭
 @api_view(['GET'])
 def burni_list(request):

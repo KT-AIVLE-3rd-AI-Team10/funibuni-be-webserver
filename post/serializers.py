@@ -1,7 +1,8 @@
+from django.db import models
 from rest_framework import serializers
 from post.models import Post,PostReport,PostLike,Comment,CommentReport,Reply,ReplyReport
 from accounts.serializers import UserSerializer
-from django.db import models
+
 
 class PostSerializer(serializers.ModelSerializer):
     is_sharing = serializers.IntegerField(default=0)  # 기본값으로 0 설정

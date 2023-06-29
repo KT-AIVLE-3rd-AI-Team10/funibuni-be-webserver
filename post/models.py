@@ -1,8 +1,8 @@
 from django.db import models
-from accounts.models import User
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
+from accounts.models import User
 
 class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
