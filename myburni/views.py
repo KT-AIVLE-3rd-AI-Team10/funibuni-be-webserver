@@ -3,14 +3,34 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from post.models import Post, PostLike,Comment
+from waste.models import UrlImages
 from post.serializers import PostSerializer, PostLikeSerializer,CommentSerializer
+from waste.serializers import WasteDisposalApplySerializer
+#나눔 내역 리스트
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def post_list(request):
+#     user = request.user
+#     posts = Post.objects.exclude(reports__user=user)
+#     serializer = PostSerializer(posts, many=True)
+#     return Response(serializer.data)
+
+#배출 내역 리스트
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def waste_list(request):
+    user = request.user
+    urlimages = UrlImages.objects.filter(user=user)  # 현재 사용자가 신청한 폐기물 이미지만 필터링
+    
+    serializer = WasteDisposalApplySerializer(urlimages, many=True)
+    return Response(serializer.data)
 
 #나눔 내역 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def post_list(request):
     user = request.user
-    posts = Post.objects.exclude(reports__user=user)
+    posts = Post.objects.filter(author=user)
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
