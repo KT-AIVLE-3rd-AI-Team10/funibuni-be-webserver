@@ -18,7 +18,7 @@ from myburni.serializers import burniSerializer
 #나의 버니 탭
 @api_view(['GET'])
 def burni_list(request):
-    waste_list = UrlImages.objects.order_by('-disposal_datetime')[:3]  # 최근에 생성된 3개의 폐기물 데이터 가져오기
+    waste_list = UrlImages.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 폐기물 데이터 가져오기
     post_list = Post.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 게시물 데이터 가져오기
     
     burni_data = list(waste_list) + list(post_list)
@@ -43,7 +43,7 @@ def waste_list(request):
 @permission_classes([IsAuthenticated])
 def post_list(request):
     user = request.user
-    posts = Post.objects.filter(author=user)
+    posts = Post.objects.filter(user=user)
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 

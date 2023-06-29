@@ -41,6 +41,7 @@ class UrlImages(models.Model):
     disposal_location = models.CharField(max_length=255, null=True)
     disposal_datetime = models.CharField(max_length=255, null=True)
     memo = models.CharField(max_length=255, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         db_table = "url_images"
