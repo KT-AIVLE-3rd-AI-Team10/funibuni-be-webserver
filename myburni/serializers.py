@@ -3,6 +3,7 @@ from rest_framework import serializers
 from post.models import Post
 from waste.models import UrlImages
 from accounts.serializers import UserSerializer
+from post.serializers import PostSerializer
 from waste.serializers import WasteDisposalApplySerializer
 
 class burniSerializer(serializers.Serializer):
