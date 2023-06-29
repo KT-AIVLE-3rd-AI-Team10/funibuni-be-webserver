@@ -28,6 +28,7 @@ def burni_list(request):
     
     serializer = burniSerializer(result_data, many=True)
     return Response(serializer.data)
+
 #배출 내역 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

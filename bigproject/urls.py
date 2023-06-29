@@ -20,9 +20,6 @@ from accounts.views import user_signup_view, phone_number_login, user_logout_vie
 from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
 from waste.views import image_upload, waste_apply, waste_songpa, waste_detail
 from myburni.views import liked_posts,comment_list,post_list,waste_list,burni_list
-# from reports.views import report_post
-# from post.views import post_list, create_post, post_detail, comment_detail, comment_create,reply_create, post_with_comments
-
 
 urlpatterns = [
     #회원가입/로그인/로그아웃/주소
@@ -35,6 +32,7 @@ urlpatterns = [
     path('api/user/info', user_info_view, name='user_info'),
     path('api/user/token-refresh', token_refresh, name='token_refresh'),
     path('api/user/address', address_create_view, name='address-create'),
+    
     #나눔 게시판
     path('api/posts/create', create_post, name='post_create'),
     path('api/posts/<int:post_id>', post_detail, name='post_detail'),

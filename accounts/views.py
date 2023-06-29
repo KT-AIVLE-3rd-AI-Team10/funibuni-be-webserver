@@ -163,14 +163,44 @@ def user_logout_view(request):
         return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
     
 #정보 확인 및 업데이트
+# @api_view(['GET', 'PUT'])
+# @permission_classes([IsAuthenticated])
+# def user_info_view(request):
+#     user = request.user
+
+#     if request.method == 'GET':
+#         serializer = UserSerializer(user)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+#     elif request.method == 'PUT':
+#         serializer = UserSerializer(user, data=request.data, partial=True)
+
+#         if serializer.is_valid():
+#             # Update only the nickname field
+#             serializer.save(nickname=request.data.get('nickname', user.nickname))
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def user_info_view(request):
     user = request.user
 
     if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Get the address associated with the user
+        address = Address.objects.filter(user=user).first()
+
+        # Serialize user and address data
+        user_serializer = UserSerializer(user)
+        address_serializer = AddressSerializer(address) if address else None
+
+        # Combine user and address data
+        response_data = {
+            'user': user_serializer.data,
+            'address': address_serializer.data if address_serializer else None
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
     elif request.method == 'PUT':
         serializer = UserSerializer(user, data=request.data, partial=True)
