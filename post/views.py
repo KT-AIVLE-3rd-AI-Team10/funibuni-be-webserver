@@ -21,10 +21,9 @@ def create_post(request):
 @permission_classes([IsAuthenticated])
 def post_list(request):
     district = request.GET.get('address_district')  # 쿼리 매개변수에서 자치구 값을 가져옴
-
     posts = Post.objects.all()
     if district:
-        posts = posts.filter(address__address_district=district)  # 주소의 자치구를 기준으로 게시물 필터링
+        posts = posts.filter(address_district=district, is_sharing=0)  # 주소의 자치구와 is_sharing=0인 게시물 필터링
 
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)

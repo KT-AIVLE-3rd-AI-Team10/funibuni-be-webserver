@@ -18,7 +18,7 @@ class Post(models.Model):
     address_dong = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     expired_date = models.DateTimeField()
-    is_sharing = models.IntegerField(default=0)
+    is_sharing = models.BooleanField(default=False)
     comments_count = models.IntegerField(default=0)
     likes_count = models.IntegerField(default=0)
     class Meta:

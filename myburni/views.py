@@ -43,9 +43,12 @@ def waste_list(request):
 #나눔 내역 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def post_list(request):
-    user = request.user
-    posts = Post.objects.filter(user=user)
+def list_post(request):
+    district = request.GET.get('address_district')  # 쿼리 매개변수에서 자치구 값을 가져옴
+    posts = Post.objects.all()
+    if district:
+        posts = posts.filter(address_district=district, is_sharing=False)  # 주소의 자치구와 is_sharing=0인 게시물 필터링
+
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
