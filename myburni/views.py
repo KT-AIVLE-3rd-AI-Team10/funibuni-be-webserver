@@ -7,14 +7,6 @@ from waste.models import UrlImages
 from post.serializers import PostSerializer, PostLikeSerializer,CommentSerializer
 from waste.serializers import WasteDisposalApplySerializer
 from myburni.serializers import burniSerializer
-#나눔 내역 리스트
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def post_list(request):
-#     user = request.user
-#     posts = Post.objects.exclude(reports__user=user)
-#     serializer = PostSerializer(posts, many=True)
-#     return Response(serializer.data)
 
 #나의 버니 탭
 @api_view(['GET'])
