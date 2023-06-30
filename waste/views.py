@@ -157,7 +157,7 @@ def image_upload(request):
                                     "large_category_name" : temp_category_name,
                                     "probability" : probability
                                 },
-                                "small-category": []
+                                "small-category": {}
                                 }
                             results.append(result_dict)
                             
