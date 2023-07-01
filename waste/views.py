@@ -157,15 +157,16 @@ def image_upload(request):
                                     "large_category_name" : temp_category_name,
                                     "probability" : probability
                                 },
-                                "small-category": {}
+                                "small-category": None
                                 }
                             results.append(result_dict)
-                            if not handled_labels:
-                                return None, {"error": "No labels found."}
-                                
-                            first_label = list(handled_labels)[0]
                             
+            if not handled_labels:
+                return None, [] ##빈 리스트에 딕셔너리 나오도록
+                                
+            first_label = list(handled_labels)[0]  
             # 의자 모델링!
+            
             if first_label == 0:
                 yolo_model = YOLO('waste/yolo/chair_best_model/best.pt')
                 result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
