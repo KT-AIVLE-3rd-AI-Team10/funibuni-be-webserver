@@ -5,7 +5,7 @@ from accounts.serializers import UserSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
-    is_sharing = serializers.IntegerField(default=0)  # 기본값으로 0 설정
+    is_sharing = serializers.BooleanField(default=False)  # 기본값으로 0 설정
     user = serializers.SerializerMethodField()
     def get_comments_count(self, obj):
         return obj.comments.count()

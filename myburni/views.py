@@ -55,14 +55,15 @@ def liked_posts(request):
     post_serializer = PostSerializer(posts, many=True)
     return Response(post_serializer.data, status=status.HTTP_200_OK)
 
-#활동 내역 리스트
+#활동 내역 리스트 // 게시글 목록
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def comment_list(request):
     user = request.user
 
-    # 로그인한 사용자가 작성한 댓글 목록을 조회합니다.
+    # 로그인한 사용자가 작성한 게시물 목록을 조회합니다.
     comments = Comment.objects.filter(user=user)
-    serializer = CommentSerializer(comments, many=True)
+    posts = [comment.post for comment in comments]  # 해당 댓글이 달린 게시물들을 가져옵니다.
+    serializer = PostSerializer(posts, many=True)  # 게시물 시리얼라이저를 사용하여 직렬화합니다.
     return Response(serializer.data, status=200)
 
