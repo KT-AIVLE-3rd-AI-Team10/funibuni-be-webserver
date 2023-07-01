@@ -95,7 +95,8 @@ def waste_apply(request):
 def image_upload(request):
     if 'image' in request.FILES:
         image = request.FILES['image']
-        image_name = image.name.replace('jfif', 'png')
+        input_str = str(timezone.now())[:21].replace(' ', '-').replace(':', '-').replace('.', '-')
+        image_name = str(input_str) + '.jpg' #image.name.replace('jfif', 'png')
         path = default_storage.save(image_name, ContentFile(image.read()))
         file_name = os.path.join('media/', image_name)
         object_name = os.path.join('django/', image_name)
@@ -116,10 +117,10 @@ def image_upload(request):
         # S3에 이미지를 업로드합니다.
         # 'your_bucket_name'은 실제 S3 버킷 이름으로 교체해야 합니다.
         s3_client.upload_file(file_name, 'furni', object_name)
-        s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name.replace(' ', '+')}"
+        s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name}"
         
         #user = User.objects.get(id=request.user.id)
-        new_image = UrlImages(image_title=image_name, image_url=s3_url, user = request.user)
+        new_image = UrlImages(image_title=image_name, image_url=s3_url, user = request.user) #timezone.now()
         new_image.save()
         
         ######## 모델링
@@ -135,6 +136,7 @@ def image_upload(request):
         
         def parse_file():
             handled_labels = set()  # 이미 처리된 라벨을 추적하는 집합
+            handled_labels_order = []  # 처리된 라벨의 순서를 기록하는 리스트
             results = []  # 결과를 저장하는 리스트
             for filename in os.listdir(directory_path): 
                 if filename.endswith(".txt"):
@@ -149,6 +151,7 @@ def image_upload(request):
                                 continue
                             # 라벨을 처리된 라벨 집합에 추가한다.
                             handled_labels.add(label)
+                            handled_labels_order.append(label)
                             temp_waste_specs = WasteSpec.objects.filter(index_large_category=label) 
                             temp_category_name = temp_waste_specs.values_list('large_category', flat=True).first()
                             result_dict= {
@@ -160,13 +163,13 @@ def image_upload(request):
                                 "small-category": None
                                 }
                             results.append(result_dict)
-                            
-            if not handled_labels:
-                return None, [] ##빈 리스트에 딕셔너리 나오도록
-                                
-            first_label = list(handled_labels)[0]  
+                                        
+            if handled_labels_order:
+               first_label = handled_labels_order[0]
+            else:
+               return None, [] 
+
             # 의자 모델링!
-            
             if first_label == 0:
                 yolo_model = YOLO('waste/yolo/chair_best_model/best.pt')
                 result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
@@ -187,7 +190,7 @@ def image_upload(request):
                                         "small_category_name" : temp_category_name,
                                         "probability" : small_probability
                                     }
-                                continue
+                                return first_label, results
                                                 
             # 자전거 모델링!
             if first_label == 2: 
@@ -210,7 +213,7 @@ def image_upload(request):
                                         "small_category_name" : temp_category_name,
                                         "probability" : small_probability
                                     }
-                                continue
+                                return first_label, results
                                 
             
             return first_label, results
@@ -218,6 +221,7 @@ def image_upload(request):
         label, results = parse_file()
         
         ## 서버에 남은 불필요한 파일 삭제
+        
         cwd = os.getcwd()
         #parent_dir = os.path.dirname(cwd)
         path_to_remove = os.path.join(cwd, 'runs')
@@ -225,6 +229,7 @@ def image_upload(request):
         default_storage.delete(path) 
         image_to_remove = os.path.join(cwd, image_name)
         os.remove(image_to_remove)
+        
         
         #폐기물 분류 표 반환
         large_waste_specs = WasteSpec.objects.filter(index_large_category=label) 
@@ -235,7 +240,7 @@ def image_upload(request):
         all_serializer = WasteSpecSerializer(all_waste_specs, many=True)
         
         
-        return Response({'image_title': str(image),
+        return Response({'image_title': str(image_name),
                          'image_url': str(s3_url),
                          'first_large_category_name' : large_category_name,
                          'labels' : results,
