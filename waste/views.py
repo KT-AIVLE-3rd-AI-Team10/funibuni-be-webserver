@@ -160,10 +160,12 @@ def image_upload(request):
                                 "small-category": {}
                                 }
                             results.append(result_dict)
+                            if not handled_labels:
+                                return None, {"error": "No labels found."}
+                                
+                            first_label = list(handled_labels)[0]
                             
-            first_label = list(handled_labels)[0]
             # 의자 모델링!
-            
             if first_label == 0:
                 yolo_model = YOLO('waste/yolo/chair_best_model/best.pt')
                 result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.15) 
