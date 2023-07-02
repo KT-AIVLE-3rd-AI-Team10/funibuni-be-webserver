@@ -57,7 +57,7 @@ def post_detail(request, post_id):
 def update_sharing(request, post_id):
     try:
         post = Post.objects.get(pk=post_id)
-        post.is_sharing = 1  # sharing이 되면 1로 변경
+        post.is_sharing = True  # sharing이 되면 True로 변경
         post.save()
         return Response({'post_id': post_id})
     except Post.DoesNotExist:
