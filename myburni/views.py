@@ -7,20 +7,42 @@ from waste.models import UrlImages
 from post.serializers import PostSerializer, PostLikeSerializer,CommentSerializer
 from waste.serializers import WasteDisposalApplySerializer
 from myburni.serializers import burniSerializer
-
+from itertools import chain
 #나의 버니 탭
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def burni_list(request):
+#     waste_list = UrlImages.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 폐기물 데이터 가져오기
+#     post_list = Post.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 게시물 데이터 가져오기
+    
+#     burni_data = list(waste_list) + list(post_list)
+#     burni_data.sort(key=lambda x: x.created_at, reverse=True)  # 최신 순으로 정렬
+    
+#     serializer = burniSerializer(burni_data, many=True)
+    
+#     return Response(serializer.data)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def burni_list(request):
     waste_list = UrlImages.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 폐기물 데이터 가져오기
-    post_list = Post.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 게시물 데이터 가져오기
+    post_list = Post.objects.filter(created_at__isnull=False).order_by('-created_at')[:3]  # 최근에 생성된 3개의 게시물 데이터 가져오기
     
     burni_data = list(waste_list) + list(post_list)
     burni_data.sort(key=lambda x: x.created_at, reverse=True)  # 최신 순으로 정렬
     
-    serializer = burniSerializer(burni_data, many=True)
-    return Response(serializer.data)
-
+    waste_serializer = WasteDisposalApplySerializer(waste_list, many=True)
+    post_serializer = PostSerializer(post_list, many=True)
+    
+    data = {
+        "user": {
+            "user_id": request.user.id,
+            "nickname": request.user.nickname
+        },
+        "posts": post_serializer.data,  # 게시물 데이터 직렬화
+        "waste_applies": waste_serializer.data  # 폐기물 데이터 직렬화
+    }
+    
+    return Response(data)
 
 #배출 내역 리스트
 @api_view(['GET'])
@@ -36,14 +58,15 @@ def waste_list(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_post(request):
-    district = request.GET.get('address_district')  # 쿼리 매개변수에서 자치구 값을 가져옴
-    posts = Post.objects.all()
+    district = request.GET.get('address_district')
+    user = request.user
+    posts = Post.objects.filter(user=user)
+
     if district:
-        posts = posts.filter(address_district=district, is_sharing=False)  # 주소의 자치구와 is_sharing=0인 게시물 필터링
+        posts = posts.filter(address_district=district, is_sharing=False)
 
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
-
 #관심 목록 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
