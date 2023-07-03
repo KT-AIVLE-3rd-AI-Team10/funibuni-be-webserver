@@ -8,6 +8,8 @@ from django.db.models import Count
 class PostSerializer(serializers.ModelSerializer):
     is_sharing = serializers.BooleanField(default=False)  # 기본값으로 0 설정
     user = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+    likes_count = serializers.SerializerMethodField()
     def get_comments_count(self, obj):
         return obj.comments.count()
     def get_likes_count(self, obj):
