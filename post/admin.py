@@ -1,13 +1,10 @@
 from django.contrib import admin
-from post.models import Post, Comment, Reply
+from post.models import Post, PostReport, PostLike, Comment, CommentReport, Reply, ReplyReport
 
-# Post 모델을 관리자 페이지에 등록
 admin.site.register(Post)
-
-# Comment 모델을 관리자 페이지에 등록
+admin.site.register(PostReport)
+admin.site.register(PostLike)
 admin.site.register(Comment)
-
-# Reply 모델을 관리자 페이지에 등록
+admin.site.register(CommentReport)
 admin.site.register(Reply)
-
-
+admin.site.register(ReplyReport)

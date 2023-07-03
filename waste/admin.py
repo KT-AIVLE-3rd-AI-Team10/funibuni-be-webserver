@@ -1,3 +1,4 @@
 from django.contrib import admin
+from waste.models import url_images
 
-# Register your models here.
+admin.site.register(url_images)
