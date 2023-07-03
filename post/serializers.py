@@ -2,6 +2,7 @@ from django.db import models
 from rest_framework import serializers
 from post.models import Post,PostReport,PostLike,Comment,CommentReport,Reply,ReplyReport
 from accounts.serializers import UserSerializer
+from django.db.models import Count
 
 # 게시판
 class PostSerializer(serializers.ModelSerializer):
@@ -121,6 +122,10 @@ class PostdetailSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True)
     
+    likes_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+    replys_count = serializers.SerializerMethodField()
+    
     def get_comments_count(self, obj):
         return obj.comments.count()
 
@@ -133,13 +138,13 @@ class PostdetailSerializer(serializers.ModelSerializer):
             'nickname': obj.user.nickname
         }
         return user_data
-    def get_reply_count(self, obj):
-        return obj.reply.count()
-
+    
+    def get_replys_count(self, obj):
+        return obj.comments.aggregate(replys_count=Count('reply'))['replys_count']
     class Meta:
         model = Post
         fields = ['post_id', 'user', 'title', 'content', 'expired_date', 'image_url',
                   'product_top_category', 'product_mid_category', 'product_low_category',
                   'address_city', 'address_district', 'address_dong','created_at', 'is_sharing',
-                  'comments_count', 'likes_count','comments','reply_count']
+                  'comments_count', 'likes_count','comments','replys_count']
     

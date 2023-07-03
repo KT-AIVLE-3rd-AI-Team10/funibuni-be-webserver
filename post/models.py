@@ -19,9 +19,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expired_date = models.DateTimeField()
     is_sharing = models.BooleanField(default=False)
-    comments_count = models.IntegerField(default=0)
-    likes_count = models.IntegerField(default=0)
-    reply_count = models.IntegerField(default=0)
+    # comments_count = models.IntegerField(default=0)
+    # likes_count = models.IntegerField(default=0)
+    # reply_count = models.IntegerField(default=0)
     class Meta:
         db_table = 'post'
 

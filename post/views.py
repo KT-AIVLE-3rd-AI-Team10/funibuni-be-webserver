@@ -180,7 +180,6 @@ def create_reply(request, post_id, comment_id):
         if serializer.is_valid():
             serializer.save(user=request.user, comment=comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #대댓글 수정,삭제
