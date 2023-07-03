@@ -17,17 +17,28 @@ import os
 import shutil
 import pandas as pd
 import json
+from django.http import JsonResponse
 
 #상세보기
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def waste_detail(request, waste_id):
-    try:
-        waste = UrlImages.objects.get(waste_id=waste_id)
-        serializer = WasteDisposalApplySerializer(waste)
-        return Response(serializer.data)
-    except UrlImages.DoesNotExist:
-        return Response({"error": "Detail not found"}, status=404)
+    waste = UrlImages.objects.get(waste_id=waste_id)
+    
+    if request.method == 'GET':
+        try:
+            serializer = WasteDisposalApplySerializer(waste)
+            return Response(serializer.data)
+        except UrlImages.DoesNotExist:
+            return Response({"error": "Detail not found"}, status=404)
+        
+    elif request.method == 'DELETE':
+        waste.delete()
+        return JsonResponse({'message': 'Deleted successfully'}, status=200)
+    
+    else:
+        # 잘못된 요청 메소드에 대한 에러 메시지를 반환합니다.
+        return JsonResponse({'error': 'Invalid HTTP method'}, status=400)
     
 #대형폐기물 분류표
 @api_view(['POST'])
@@ -88,6 +99,7 @@ def waste_apply(request):
     
     serializer = UrlImagesSerializer(urlimages)
     return Response(serializer.data)
+
 
 #이미지업로드
 @api_view(['POST'])
@@ -182,7 +194,7 @@ def image_upload(request):
                                 small_numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
                                 small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
-                                temp_waste_specs = WasteSpec.objects.filter(index_small_category=small_label) 
+                                temp_waste_specs = WasteSpec.objects.filter(index_large_category= first_label, index_small_category=small_label) 
                                 temp_category_name = temp_waste_specs.values_list('small_category', flat=True).first()
                             
                                 results[0]["small-category"] = {
@@ -205,7 +217,7 @@ def image_upload(request):
                                 small_numbers = line.split()  # 라인을 공백을 기준으로 분리하여 숫자 리스트 생성
                                 small_label = int(small_numbers[0])  # 리스트의 첫번째 숫자 추출
                                 small_probability = round(float(small_numbers[-1]),2)  # 리스트의 마지막 숫자 추출
-                                temp_waste_specs = WasteSpec.objects.filter(index_small_category=small_label) 
+                                temp_waste_specs = WasteSpec.objects.filter(index_large_category= first_label, index_small_category=small_label) 
                                 temp_category_name = temp_waste_specs.values_list('small_category', flat=True).first()
                             
                                 results[0]["small-category"] = {
@@ -221,7 +233,6 @@ def image_upload(request):
         label, results = parse_file()
         
         ## 서버에 남은 불필요한 파일 삭제
-        
         cwd = os.getcwd()
         #parent_dir = os.path.dirname(cwd)
         path_to_remove = os.path.join(cwd, 'runs')

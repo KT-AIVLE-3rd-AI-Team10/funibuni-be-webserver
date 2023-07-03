@@ -51,7 +51,7 @@ urlpatterns = [
     path('api/waste/image-upload', image_upload, name='image_upload'),
     path('api/waste/apply', waste_apply, name='waste_apply'),
     path('api/waste/table', waste_songpa, name='waste_songpa'),
-    path('api/waste/apply/<int:waste_id>/', waste_detail, name='waste_detail'),
+    path('api/waste/apply/<int:waste_id>', waste_detail, name='waste_detail'),
     
     #나의 버니
     path('api/myburni',burni_list, name='bruni_list'),
