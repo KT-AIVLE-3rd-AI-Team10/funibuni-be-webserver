@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from post.serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer
+from post.serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer,PostdetailSerializer
 from post.models import Post,User,PostLike,Comment,Reply,ReplyReport
 
 #게시판 생성
@@ -37,7 +37,7 @@ def post_detail(request, post_id):
     except Post.DoesNotExist:
         return Response({'error': '게시물을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
-        serializer = PostSerializer(post)
+        serializer = PostdetailSerializer(post)
         return Response(serializer.data)
     elif request.method == 'PUT':
         serializer = PostSerializer(post, data=request.data, partial=True)
@@ -206,7 +206,7 @@ def reply_detail(request, post_id, comment_id, reply_id):
     
     elif request.method == 'DELETE':
         reply.delete()
-        return Response({'comment_id': comment_id}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'reply_id': reply_id}, status=status.HTTP_204_NO_CONTENT)
 
 #대댓글 신고
 @api_view(['POST'])

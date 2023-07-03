@@ -3,13 +3,12 @@ from rest_framework import serializers
 from post.models import Post,PostReport,PostLike,Comment,CommentReport,Reply,ReplyReport
 from accounts.serializers import UserSerializer
 
-
+# 게시판
 class PostSerializer(serializers.ModelSerializer):
     is_sharing = serializers.BooleanField(default=False)  # 기본값으로 0 설정
     user = serializers.SerializerMethodField()
     def get_comments_count(self, obj):
         return obj.comments.count()
-
     def get_likes_count(self, obj):
         return obj.likes.count()
     def get_user(self, obj):
@@ -22,10 +21,11 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['post_id', 'user', 'title', 'content', 'expired_date', 'image_url',
                   'product_top_category', 'product_mid_category', 'product_low_category',
-                  'address_city', 'address_district', 'address_dong', 'created_at', 'is_sharing',
+                  'address_city', 'address_district', 'address_dong','created_at', 'is_sharing',
                   'comments_count', 'likes_count']
 
-        
+
+#게시판 신고     
 class PostReportSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     post_id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -45,11 +45,13 @@ class PostReportSerializer(serializers.ModelSerializer):
 
         return super().to_representation(instance)
 
+#좋아요!
 class PostLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostLike
         fields = ['post_like_id', 'post_id', 'user_id', 'created_at']
-        
+
+#댓글 신고
 class CommentReportSerializer(serializers.ModelSerializer):
     comment = serializers.PrimaryKeyRelatedField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -64,7 +66,8 @@ class CommentReportSerializer(serializers.ModelSerializer):
             return {}  # 빈 딕셔너리로 댓글을 숨김 처리합니다.
 
         return super().to_representation(instance)
-    
+
+#댓글
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     post_id = serializers.PrimaryKeyRelatedField(source='post', read_only=True)
@@ -80,6 +83,8 @@ class CommentSerializer(serializers.ModelSerializer):
         }
         return user_data
     
+
+#대댓글
 class ReplySerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(read_only=True)
     comment_id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -95,6 +100,7 @@ class ReplySerializer(serializers.ModelSerializer):
         }
         return user_data
 
+#대댓글 신고
 class ReplyReportSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     reply = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -108,4 +114,32 @@ class ReplyReportSerializer(serializers.ModelSerializer):
         if instance.reply.reports.filter(user=self.context['request'].user).exists():
             return {}  # 대댓글을 숨기기 위해 빈 딕셔너리를 반환합니다.
         return super().to_representation(instance)
+    
+# 게시판 상세
+class PostdetailSerializer(serializers.ModelSerializer):
+    is_sharing = serializers.BooleanField(default=False)  # 기본값으로 0 설정
+    user = serializers.SerializerMethodField()
+    comments = CommentSerializer(many=True)
+    
+    def get_comments_count(self, obj):
+        return obj.comments.count()
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+
+    def get_user(self, obj):
+        user_data = {
+            'user_id': obj.user.id,
+            'nickname': obj.user.nickname
+        }
+        return user_data
+    def get_reply_count(self, obj):
+        return obj.reply.count()
+
+    class Meta:
+        model = Post
+        fields = ['post_id', 'user', 'title', 'content', 'expired_date', 'image_url',
+                  'product_top_category', 'product_mid_category', 'product_low_category',
+                  'address_city', 'address_district', 'address_dong','created_at', 'is_sharing',
+                  'comments_count', 'likes_count','comments','reply_count']
     

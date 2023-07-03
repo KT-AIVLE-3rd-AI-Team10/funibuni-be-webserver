@@ -21,6 +21,7 @@ class Post(models.Model):
     is_sharing = models.BooleanField(default=False)
     comments_count = models.IntegerField(default=0)
     likes_count = models.IntegerField(default=0)
+    reply_count = models.IntegerField(default=0)
     class Meta:
         db_table = 'post'
 
