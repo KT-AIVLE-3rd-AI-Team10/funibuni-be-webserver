@@ -1,4 +1,4 @@
 from django.contrib import admin
-from waste.models import url_images
+from waste.models import UrlImages
 
-admin.site.register(url_images)
+admin.site.register(UrlImages)
