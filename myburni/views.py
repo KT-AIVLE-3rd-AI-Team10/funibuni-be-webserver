@@ -24,8 +24,8 @@ from itertools import chain
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def burni_list(request):
-    waste_list = UrlImages.objects.order_by('-created_at')[:3]  # 최근에 생성된 3개의 폐기물 데이터 가져오기
-    post_list = Post.objects.filter(created_at__isnull=False).order_by('-created_at')[:3]  # 최근에 생성된 3개의 게시물 데이터 가져오기
+    waste_list = UrlImages.objects.filter(user=request.user, apply_binary=1).order_by('-created_at')[:3]  # 현재 사용자가 생성한 폐기물 데이터 가져오기
+    post_list = Post.objects.filter(user=request.user, created_at__isnull=False).order_by('-created_at')[:3]  # 현재 사용자가 생성한 게시물 데이터 가져오기
     
     burni_data = list(waste_list) + list(post_list)
     burni_data.sort(key=lambda x: x.created_at, reverse=True)  # 최신 순으로 정렬
