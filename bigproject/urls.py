@@ -20,7 +20,9 @@ from accounts.views import user_signup_view, phone_number_login, user_logout_vie
 from post.views import create_post,post_detail,post_list,update_sharing,create_postreport,post_like,comment_create,comment_detail,comment_report,create_reply,reply_detail,reply_report
 from waste.views import image_upload, waste_apply, waste_songpa, waste_detail
 from myburni.views import liked_posts,comment_list,list_post,waste_list,burni_list
-
+from django.shortcuts import render
+def index(request):
+    return render(request,'index.html')
 urlpatterns = [
     #회원가입/로그인/로그아웃/주소
     path("admin/", admin.site.urls),
@@ -59,6 +61,11 @@ urlpatterns = [
     path('api/myburni/like-posts',liked_posts, name='like_posts'),
     path('api/myburni/activities',comment_list, name='comment_list'),
     path('api/myburni/posts',list_post, name='myburni_list_post'),
+    
+    #프론트 웹
+    path('',index),
+
+
     
     
 ]

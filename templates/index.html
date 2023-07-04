@@ -1,0 +1,2104 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIVLE 3rd 10조 Funi Buni</title>
+
+    <link rel="shortcut icon" href="static/images/symbol.png" type="image/x-icon" />
+
+    
+    
+    <!-- ===== CSS Files ===== -->
+    <link rel="stylesheet" href="static/css/slider2.css" />
+    <link rel="stylesheet" href="static/css/glightbox.min.css" />
+    <link rel="stylesheet" href="static/css/animate.css" />
+    <link rel="stylesheet" href="static/css/tailwind.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <script src="static/js/wow.min.js"></script>
+    <script>
+      // ===== wow js
+      new WOW().init();
+    </script>
+
+    <!-- ===== Alpine JS ===== -->
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body
+    x-data="
+      {
+        scrolledFromTop: false
+      }
+    "
+    x-init="window.pageYOffset >= 50 ? scrolledFromTop = true : scrolledFromTop = false"
+    @scroll.window="window.pageYOffset >= 50 ? scrolledFromTop = true : scrolledFromTop = false"
+    class="ud-bg-white dark:ud-bg-dark"
+  >
+    <!-- ===== Header start ===== -->
+    <header
+      x-data="
+        {
+          navbarOpen: false,
+          dropdownOpen: false
+        }
+      "
+      :class="scrolledFromTop ? 'ud-bg-white dark:ud-bg-dark ud-bg-opacity-80 dark:ud-bg-opacity-80 ud-shadow-sticky ud-backdrop-blur-sm' : 'ud-bg-white dark:ud-bg-dark' "
+      class="ud-w-full ud-flex ud-items-center ud-sticky ud-top-0 ud-z-50 wow fadeInUp"
+      data-wow-delay=".2s"
+    >
+      <div class="ud-container">
+        <div
+          class="ud-flex ud--mx-4 ud-items-center ud-justify-between ud-relative"
+        >
+          <div class="ud-px-4 ud-w-60 ud-max-w-full">
+            <a
+              href="index.html"
+              :class="scrolledFromTop ? 'ud-py-5 lg:ud-py-2' : 'ud-py-7 lg:ud-py-5' "
+              class="ud-w-full ud-block"
+            >
+              <img
+                src="static/images/logo/title_logo_bk_pretendard.svg"
+                alt="logo"
+                class="ud-w-full dark:ud-hidden"
+              />
+              <img
+                src="static/images/logo/title_logo_wh_pretendard.svg"
+                alt="logo"
+                class="ud-w-full ud-hidden dark:ud-block"
+              />
+            </a>
+          </div>
+          <div class="ud-flex ud-px-4 ud-justify-end ud-items-center ud-w-full">
+            <div>
+              <button
+                @click="navbarOpen = !navbarOpen"
+                :class="navbarOpen && 'navbarTogglerActive' "
+                id="navbarToggler"
+                class="ud-block ud-absolute ud-right-4 ud-top-1/2 ud--translate-y-1/2 lg:ud-hidden focus:ud-ring-2 ud-ring-primary ud-px-3 ud-py-[6px] ud-rounded-lg"
+              >
+                <span
+                  :class="navbarOpen && 'ud-rotate-45 ud-top-[7px]' "
+                  class="ud-relative ud-w-[30px] ud-h-[2px] ud-my-[6px] ud-block ud-bg-black dark:ud-bg-white"
+                ></span>
+                <span
+                  :class="navbarOpen && 'ud-opacity-0' "
+                  class="ud-relative ud-w-[30px] ud-h-[2px] ud-my-[6px] ud-block ud-bg-black dark:ud-bg-white"
+                ></span>
+                <span
+                  :class="navbarOpen && 'ud-top-[-8px] ud-rotate-[135deg]' "
+                  class="ud-relative ud-w-[30px] ud-h-[2px] ud-my-[6px] ud-block ud-bg-black dark:ud-bg-white"
+                ></span>
+              </button>
+              <nav
+                :class="!navbarOpen && 'ud-hidden' "
+                id="navbarCollapse"
+                class="ud-absolute ud-py-4 lg:ud-py-0 ud-px-6 ud-bg-white dark:ud-bg-black ud-shadow ud-rounded-lg ud-max-w-[250px] ud-w-full lg:ud-bg-transparent dark:lg:ud-bg-transparent lg:ud-max-w-full lg:ud-w-full ud-right-4 ud-top-full lg:ud-block lg:ud-static lg:ud-shadow-none"
+              >
+                <ul class="ud-blcok lg:ud-flex">
+                  <li>
+                    <a
+                      href="#home"
+                      :class="scrolledFromTop ? 'ud-py-2 lg:ud-py-6' : 'ud-py-2 lg:ud-py-8' "
+                      class="scroll-menu ud-text-base ud-font-medium ud-text-body-color hover:ud-text-primary lg:ud-inline-flex ud-flex lg:ud-ml-8 xl:ud-ml-12"
+                    >
+                      홈
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#about"
+                      :class="scrolledFromTop ? 'ud-py-2 lg:ud-py-6' : 'ud-py-2 lg:ud-py-8' "
+                      class="scroll-menu ud-text-base ud-font-medium ud-text-body-color hover:ud-text-primary lg:ud-inline-flex ud-flex lg:ud-ml-8 xl:ud-ml-12"
+                    >
+                      소개
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a
+                      href="#ai"
+                      :class="scrolledFromTop ? 'ud-py-2 lg:ud-py-6' : 'ud-py-2 lg:ud-py-8' "
+                      class="scroll-menu ud-text-base ud-font-medium ud-text-body-color hover:ud-text-primary lg:ud-inline-flex ud-flex lg:ud-ml-8 xl:ud-ml-12"
+                    >
+                      AI 모델
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#team"
+                      :class="scrolledFromTop ? 'ud-py-2 lg:ud-py-6' : 'ud-py-2 lg:ud-py-8' "
+                      class="scroll-menu ud-text-base ud-font-medium ud-text-body-color hover:ud-text-primary lg:ud-inline-flex ud-flex lg:ud-ml-8 xl:ud-ml-12"
+                    >
+                      팀원 소개
+                    </a>
+                  </li>
+                  
+                </ul>
+              </nav>
+            </div>
+            <div
+              class="xl:ud-pl-20 sm:ud-flex ud-justify-end ud-hidden ud-pr-16 lg:ud-pr-0"
+            >
+              
+            <div>
+              <label
+                for="darkToggler"
+                class="ud-cursor-pointer ud-w-9 ud-h-9 md:ud-w-14 md:ud-h-14 ud-rounded-full ud-flex ud-items-center ud-justify-center ud-bg-gray-2 dark:ud-bg-dark-bg ud-text-black dark:ud-text-white"
+              >
+                <input
+                  type="checkbox"
+                  name="darkToggler"
+                  id="darkToggler"
+                  class="ud-sr-only"
+                  aria-label="darkToggler"
+                />
+                <svg
+                  viewBox="0 0 23 23"
+                  class="ud-stroke-current dark:ud-hidden ud-w-4 ud-h-4 md:ud-w-5 md:ud-h-5"
+                  fill="none"
+                >
+                  <path
+                    d="M9.55078 1.5C5.80078 1.5 1.30078 5.25 1.30078 11.25C1.30078 17.25 5.80078 21.75 11.8008 21.75C17.8008 21.75 21.5508 17.25 21.5508 13.5C13.3008 18.75 4.30078 9.75 9.55078 1.5Z"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <svg
+                  viewBox="0 0 25 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="ud-hidden dark:ud-block ud-w-5 ud-h-5 md:ud-w-5 md:ud-h-5"
+                >
+                  <mask id="path-1-inside-1_977:1934" fill="white">
+                    <path
+                      d="M12.0508 16.5C10.8573 16.5 9.71271 16.0259 8.8688 15.182C8.02489 14.3381 7.55078 13.1935 7.55078 12C7.55078 10.8065 8.02489 9.66193 8.8688 8.81802C9.71271 7.97411 10.8573 7.5 12.0508 7.5C13.2443 7.5 14.3888 7.97411 15.2328 8.81802C16.0767 9.66193 16.5508 10.8065 16.5508 12C16.5508 13.1935 16.0767 14.3381 15.2328 15.182C14.3888 16.0259 13.2443 16.5 12.0508 16.5ZM12.0508 18C13.6421 18 15.1682 17.3679 16.2934 16.2426C17.4186 15.1174 18.0508 13.5913 18.0508 12C18.0508 10.4087 17.4186 8.88258 16.2934 7.75736C15.1682 6.63214 13.6421 6 12.0508 6C10.4595 6 8.93336 6.63214 7.80814 7.75736C6.68292 8.88258 6.05078 10.4087 6.05078 12C6.05078 13.5913 6.68292 15.1174 7.80814 16.2426C8.93336 17.3679 10.4595 18 12.0508 18ZM12.0508 0C12.2497 0 12.4405 0.0790176 12.5811 0.21967C12.7218 0.360322 12.8008 0.551088 12.8008 0.75V3.75C12.8008 3.94891 12.7218 4.13968 12.5811 4.28033C12.4405 4.42098 12.2497 4.5 12.0508 4.5C11.8519 4.5 11.6611 4.42098 11.5205 4.28033C11.3798 4.13968 11.3008 3.94891 11.3008 3.75V0.75C11.3008 0.551088 11.3798 0.360322 11.5205 0.21967C11.6611 0.0790176 11.8519 0 12.0508 0V0ZM12.0508 19.5C12.2497 19.5 12.4405 19.579 12.5811 19.7197C12.7218 19.8603 12.8008 20.0511 12.8008 20.25V23.25C12.8008 23.4489 12.7218 23.6397 12.5811 23.7803C12.4405 23.921 12.2497 24 12.0508 24C11.8519 24 11.6611 23.921 11.5205 23.7803C11.3798 23.6397 11.3008 23.4489 11.3008 23.25V20.25C11.3008 20.0511 11.3798 19.8603 11.5205 19.7197C11.6611 19.579 11.8519 19.5 12.0508 19.5ZM24.0508 12C24.0508 12.1989 23.9718 12.3897 23.8311 12.5303C23.6905 12.671 23.4997 12.75 23.3008 12.75H20.3008C20.1019 12.75 19.9111 12.671 19.7705 12.5303C19.6298 12.3897 19.5508 12.1989 19.5508 12C19.5508 11.8011 19.6298 11.6103 19.7705 11.4697C19.9111 11.329 20.1019 11.25 20.3008 11.25H23.3008C23.4997 11.25 23.6905 11.329 23.8311 11.4697C23.9718 11.6103 24.0508 11.8011 24.0508 12ZM4.55078 12C4.55078 12.1989 4.47176 12.3897 4.33111 12.5303C4.19046 12.671 3.99969 12.75 3.80078 12.75H0.800781C0.601869 12.75 0.411103 12.671 0.270451 12.5303C0.129799 12.3897 0.0507813 12.1989 0.0507812 12C0.0507813 11.8011 0.129799 11.6103 0.270451 11.4697C0.411103 11.329 0.601869 11.25 0.800781 11.25H3.80078C3.99969 11.25 4.19046 11.329 4.33111 11.4697C4.47176 11.6103 4.55078 11.8011 4.55078 12ZM20.5363 3.5145C20.6769 3.65515 20.7559 3.84588 20.7559 4.04475C20.7559 4.24362 20.6769 4.43435 20.5363 4.575L18.4153 6.6975C18.3455 6.76713 18.2628 6.82235 18.1717 6.86C18.0806 6.89765 17.983 6.91699 17.8845 6.91692C17.6855 6.91678 17.4947 6.83758 17.354 6.69675C17.2844 6.62702 17.2292 6.54425 17.1915 6.45318C17.1539 6.36211 17.1345 6.26452 17.1346 6.16597C17.1348 5.96695 17.214 5.77613 17.3548 5.6355L19.4758 3.5145C19.6164 3.3739 19.8072 3.29491 20.006 3.29491C20.2049 3.29491 20.3956 3.3739 20.5363 3.5145ZM6.74678 17.304C6.88738 17.4446 6.96637 17.6354 6.96637 17.8342C6.96637 18.0331 6.88738 18.2239 6.74678 18.3645L4.62578 20.4855C4.48433 20.6221 4.29488 20.6977 4.09823 20.696C3.90158 20.6943 3.71347 20.6154 3.57442 20.4764C3.43536 20.3373 3.35648 20.1492 3.35478 19.9526C3.35307 19.7559 3.42866 19.5665 3.56528 19.425L5.68628 17.304C5.82693 17.1634 6.01766 17.0844 6.21653 17.0844C6.4154 17.0844 6.60614 17.1634 6.74678 17.304ZM20.5363 20.4855C20.3956 20.6261 20.2049 20.7051 20.006 20.7051C19.8072 20.7051 19.6164 20.6261 19.4758 20.4855L17.3548 18.3645C17.2182 18.223 17.1426 18.0336 17.1443 17.8369C17.146 17.6403 17.2249 17.4522 17.3639 17.3131C17.503 17.1741 17.6911 17.0952 17.8877 17.0935C18.0844 17.0918 18.2738 17.1674 18.4153 17.304L20.5363 19.425C20.6769 19.5656 20.7559 19.7564 20.7559 19.9552C20.7559 20.1541 20.6769 20.3449 20.5363 20.4855ZM6.74678 6.6975C6.60614 6.8381 6.4154 6.91709 6.21653 6.91709C6.01766 6.91709 5.82693 6.8381 5.68628 6.6975L3.56528 4.575C3.49365 4.50582 3.43651 4.42306 3.39721 4.33155C3.3579 4.24005 3.33721 4.14164 3.33634 4.04205C3.33548 3.94247 3.35445 3.84371 3.39216 3.75153C3.42988 3.65936 3.48557 3.57562 3.55598 3.5052C3.6264 3.43478 3.71014 3.37909 3.80232 3.34138C3.89449 3.30367 3.99325 3.2847 4.09283 3.28556C4.19242 3.28643 4.29083 3.30712 4.38233 3.34642C4.47384 3.38573 4.5566 3.44287 4.62578 3.5145L6.74678 5.6355C6.81663 5.70517 6.87204 5.78793 6.90985 5.87905C6.94766 5.97017 6.96712 6.06785 6.96712 6.1665C6.96712 6.26515 6.94766 6.36283 6.90985 6.45395C6.87204 6.54507 6.81663 6.62783 6.74678 6.6975Z"
+                    />
+                  </mask>
+                  <path
+                    d="M12.0508 16.5C10.8573 16.5 9.71271 16.0259 8.8688 15.182C8.02489 14.3381 7.55078 13.1935 7.55078 12C7.55078 10.8065 8.02489 9.66193 8.8688 8.81802C9.71271 7.97411 10.8573 7.5 12.0508 7.5C13.2443 7.5 14.3888 7.97411 15.2328 8.81802C16.0767 9.66193 16.5508 10.8065 16.5508 12C16.5508 13.1935 16.0767 14.3381 15.2328 15.182C14.3888 16.0259 13.2443 16.5 12.0508 16.5ZM12.0508 18C13.6421 18 15.1682 17.3679 16.2934 16.2426C17.4186 15.1174 18.0508 13.5913 18.0508 12C18.0508 10.4087 17.4186 8.88258 16.2934 7.75736C15.1682 6.63214 13.6421 6 12.0508 6C10.4595 6 8.93336 6.63214 7.80814 7.75736C6.68292 8.88258 6.05078 10.4087 6.05078 12C6.05078 13.5913 6.68292 15.1174 7.80814 16.2426C8.93336 17.3679 10.4595 18 12.0508 18ZM12.0508 0C12.2497 0 12.4405 0.0790176 12.5811 0.21967C12.7218 0.360322 12.8008 0.551088 12.8008 0.75V3.75C12.8008 3.94891 12.7218 4.13968 12.5811 4.28033C12.4405 4.42098 12.2497 4.5 12.0508 4.5C11.8519 4.5 11.6611 4.42098 11.5205 4.28033C11.3798 4.13968 11.3008 3.94891 11.3008 3.75V0.75C11.3008 0.551088 11.3798 0.360322 11.5205 0.21967C11.6611 0.0790176 11.8519 0 12.0508 0V0ZM12.0508 19.5C12.2497 19.5 12.4405 19.579 12.5811 19.7197C12.7218 19.8603 12.8008 20.0511 12.8008 20.25V23.25C12.8008 23.4489 12.7218 23.6397 12.5811 23.7803C12.4405 23.921 12.2497 24 12.0508 24C11.8519 24 11.6611 23.921 11.5205 23.7803C11.3798 23.6397 11.3008 23.4489 11.3008 23.25V20.25C11.3008 20.0511 11.3798 19.8603 11.5205 19.7197C11.6611 19.579 11.8519 19.5 12.0508 19.5ZM24.0508 12C24.0508 12.1989 23.9718 12.3897 23.8311 12.5303C23.6905 12.671 23.4997 12.75 23.3008 12.75H20.3008C20.1019 12.75 19.9111 12.671 19.7705 12.5303C19.6298 12.3897 19.5508 12.1989 19.5508 12C19.5508 11.8011 19.6298 11.6103 19.7705 11.4697C19.9111 11.329 20.1019 11.25 20.3008 11.25H23.3008C23.4997 11.25 23.6905 11.329 23.8311 11.4697C23.9718 11.6103 24.0508 11.8011 24.0508 12ZM4.55078 12C4.55078 12.1989 4.47176 12.3897 4.33111 12.5303C4.19046 12.671 3.99969 12.75 3.80078 12.75H0.800781C0.601869 12.75 0.411103 12.671 0.270451 12.5303C0.129799 12.3897 0.0507813 12.1989 0.0507812 12C0.0507813 11.8011 0.129799 11.6103 0.270451 11.4697C0.411103 11.329 0.601869 11.25 0.800781 11.25H3.80078C3.99969 11.25 4.19046 11.329 4.33111 11.4697C4.47176 11.6103 4.55078 11.8011 4.55078 12ZM20.5363 3.5145C20.6769 3.65515 20.7559 3.84588 20.7559 4.04475C20.7559 4.24362 20.6769 4.43435 20.5363 4.575L18.4153 6.6975C18.3455 6.76713 18.2628 6.82235 18.1717 6.86C18.0806 6.89765 17.983 6.91699 17.8845 6.91692C17.6855 6.91678 17.4947 6.83758 17.354 6.69675C17.2844 6.62702 17.2292 6.54425 17.1915 6.45318C17.1539 6.36211 17.1345 6.26452 17.1346 6.16597C17.1348 5.96695 17.214 5.77613 17.3548 5.6355L19.4758 3.5145C19.6164 3.3739 19.8072 3.29491 20.006 3.29491C20.2049 3.29491 20.3956 3.3739 20.5363 3.5145ZM6.74678 17.304C6.88738 17.4446 6.96637 17.6354 6.96637 17.8342C6.96637 18.0331 6.88738 18.2239 6.74678 18.3645L4.62578 20.4855C4.48433 20.6221 4.29488 20.6977 4.09823 20.696C3.90158 20.6943 3.71347 20.6154 3.57442 20.4764C3.43536 20.3373 3.35648 20.1492 3.35478 19.9526C3.35307 19.7559 3.42866 19.5665 3.56528 19.425L5.68628 17.304C5.82693 17.1634 6.01766 17.0844 6.21653 17.0844C6.4154 17.0844 6.60614 17.1634 6.74678 17.304ZM20.5363 20.4855C20.3956 20.6261 20.2049 20.7051 20.006 20.7051C19.8072 20.7051 19.6164 20.6261 19.4758 20.4855L17.3548 18.3645C17.2182 18.223 17.1426 18.0336 17.1443 17.8369C17.146 17.6403 17.2249 17.4522 17.3639 17.3131C17.503 17.1741 17.6911 17.0952 17.8877 17.0935C18.0844 17.0918 18.2738 17.1674 18.4153 17.304L20.5363 19.425C20.6769 19.5656 20.7559 19.7564 20.7559 19.9552C20.7559 20.1541 20.6769 20.3449 20.5363 20.4855ZM6.74678 6.6975C6.60614 6.8381 6.4154 6.91709 6.21653 6.91709C6.01766 6.91709 5.82693 6.8381 5.68628 6.6975L3.56528 4.575C3.49365 4.50582 3.43651 4.42306 3.39721 4.33155C3.3579 4.24005 3.33721 4.14164 3.33634 4.04205C3.33548 3.94247 3.35445 3.84371 3.39216 3.75153C3.42988 3.65936 3.48557 3.57562 3.55598 3.5052C3.6264 3.43478 3.71014 3.37909 3.80232 3.34138C3.89449 3.30367 3.99325 3.2847 4.09283 3.28556C4.19242 3.28643 4.29083 3.30712 4.38233 3.34642C4.47384 3.38573 4.5566 3.44287 4.62578 3.5145L6.74678 5.6355C6.81663 5.70517 6.87204 5.78793 6.90985 5.87905C6.94766 5.97017 6.96712 6.06785 6.96712 6.1665C6.96712 6.26515 6.94766 6.36283 6.90985 6.45395C6.87204 6.54507 6.81663 6.62783 6.74678 6.6975Z"
+                    fill="black"
+                    stroke="white"
+                    stroke-width="2"
+                    mask="url(#path-1-inside-1_977:1934)"
+                  />
+                </svg>
+              </label>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ===== Header end ===== -->
+
+    <!-- ===== Hero Start ===== -->
+    <section id="home">
+      <div
+        class="ud-bg-gradient-to-l ud-from-gradient-1 ud-to-gradient-2 dark:ud-from-[#3c3e56] dark:ud-to-black ud-rounded-[20px] ud-py-16 ud-mx-4 2xl:ud-mx-[60px] ud-pl-6 lg:ud-pl-10"
+      >
+        <div class="ud-container">
+          <div class="ud-flex ud-flex-wrap ud-items-center ud--mx-4">
+            <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+              <div
+                class="ud-mb-14 lg:ud-mb-0 ud-max-w-[470px] wow fadeInUp"
+                data-wow-delay=".2s"
+              >
+                <h1
+                  class="ud-text-black dark:ud-text-white ud-text-4xl md:ud-text-[45px] ud-leading-tight md:ud-leading-tight ud-mb-5"
+                >
+                  <span class="ud-font-semibold ud-text-base">AI 기반 대형폐기물 배출 서비스</span><br>
+                  
+                  <span class="ud-font-bold ud-text-9xl">Funi Buni</span>
+                </h1>
+                <p
+                  class="ud-font-medium ud-text-base ud-text-body-color ud-mb-16"
+                >
+                  버리기 번거로운 대형폐기물? <br> 분류부터 신청까지 즐겁게 퍼니버니가 다 해줄게요!
+                </p>
+                <div class="ud-flex ud-items-center">
+                  <a
+                    href="#download"
+                    class="ud-text-base ud-font-bold ud-text-white ud-bg-primary ud-rounded-xl ud-py-4 ud-px-10 ud-transition-all hover:ud-shadow-primary-hover ud-mr-9"
+                  >
+                    다운로드
+                  </a>
+
+                  <a
+                    href="javascript:void(0)"
+                    class="ud-flex ud-items-center ud-font-bold ud-text-base ud-text-black dark:ud-text-white hover:ud-text-primary dark:hover:ud-text-primary ud-group ud-transition-all glightbox"
+                  >
+                    <span
+                      class="ud-w-[60px] ud-h-[60px] ud-rounded-full ud-inline-flex ud-items-center ud-justify-center ud-bg-primary ud-bg-opacity-10 ud-text-primary ud-mr-5 ud-transition-all group-hover:ud-bg-opacity-100 group-hover:ud-text-white"
+                    >
+                      <svg
+                        width="15"
+                        height="18"
+                        viewBox="0 0 15 18"
+                        class="ud-fill-current"
+                      >
+                        <path
+                          d="M15 9L-8.15666e-07 17.6603L-5.85622e-08 0.339746L15 9Z"
+                        />
+                      </svg>
+                    </span>
+                    시연 영상 보러가기
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+              <div
+                class="ud-text-center ud-relative ud-z-10 ud-h-[532px] wow fadeInUp"
+                data-wow-delay=".25s"
+              >
+                <img
+                  src="static/images/hero/목업.svg"
+                  alt="hero-image"
+                  class="ud-absolute ud--z-2 ud-top-1/2 ud-left-1/2 ud--translate-x-1/2 ud--translate-y-1/2 "
+                />
+                <span
+                  class="ud-absolute ud--z-1 ud-top-1/2 ud-left-1/2 ud--translate-x-1/2 ud--translate-y-1/2 ud-max-w-[350px] ud-w-full ud-h-[350px] ud-bg-purple-600 dark:ud-bg-dark ud-bg-opacity-25 dark:ud-bg-opacity-25 ud-shadow-shape-1 ud-rounded-full"
+                >
+                </span>
+                <span
+                  class="ud-absolute ud--z-1 ud-top-1/2 ud-left-1/2 ud--translate-x-1/2 ud--translate-y-1/2 ud-max-w-[450px] ud-w-full ud-h-[450px] ud-bg-purple-600 dark:ud-bg-dark ud-bg-opacity-25 dark:ud-bg-opacity-25 ud-shadow-shape-1 ud-rounded-full"
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Hero end ===== -->
+
+    <!-- ===== About1 start ===== -->
+    <section id="about" class="ud-pt-[100px]">
+      <div class="ud-container">
+        <div class="ud-flex ud-flex-wrap ud-items-center ud--mx-4">
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div
+              class="ud-text-center ud-mb-14 lg:ud-mb-0 wow fadeInUp"
+              data-wow-delay=".2s"
+            >
+              <img
+                src="static/images/about/search_mint.svg"
+                alt="image"
+                class="ud-max-full"
+              />
+            </div>
+          </div>
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div
+              class="ud-max-w-[485px] lg:ud-ml-auto wow fadeInUp"
+              data-wow-delay=".3s"
+            >
+              <span
+                class="ud-font-bold ud-text-base ud-text-primary ud-block ud-mb-2"
+              >
+                편하게
+              </span>
+              <h2
+                class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-leading-tight ud-text-black dark:ud-text-white ud-mb-6"
+              >
+                복잡한 가격표는 안녕
+              </h2>
+              <p
+                class="ud-text-lg ud-leading-relaxed ud-text-body-color ud-mb-12 lg:ud-mb-16"
+              >
+                구청 홈페이지에 나와있는 복잡한 가격표.
+                <br> 내가 버릴 물건은 도대체 어디에 있는거야?
+                <br> 더이상 가격표를 보면서 헤매지 마세요.
+              </p>
+              <a
+                href="javascript:void(0)"
+                class="ud-inline-flex ud-items-center ud-font-bold ud-text-base ud-text-primary hover:ud-underline"
+              >
+              
+
+              
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== About1 end ===== -->
+
+    <!-- ===== About2 start ===== -->
+    <section class="ud-pt-14">
+      <div class="ud-container">
+        <div class="ud-flex ud-flex-wrap ud-items-center ud--mx-4">
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div
+              class="ud-text-center ud-mb-14 lg:ud-mb-0 wow fadeInUp"
+              data-wow-delay=".2s"
+            >
+              <img
+                src="static/images/about/modeling_mint.svg"
+                alt="image"
+                class="ud-max-full"
+              />
+            </div>
+          </div>
+          <div class="ud-w-full lg:ud-w-1/2 lg:ud-order-first ud-px-4">
+            <div class="ud-max-w-[485px] wow fadeInUp" data-wow-delay=".3s">
+              <span
+                class="ud-font-bold ud-text-base ud-text-primary ud-block ud-mb-2"
+              >
+                쉽고 빠르게, 찰칵
+              </span>
+              <h2
+                class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-leading-tight ud-text-black dark:ud-text-white ud-mb-6"
+              >
+                사진 한 장으로 A to Z
+              </h2>
+              <p
+                class="ud-text-lg ud-leading-relaxed ud-text-body-color ud-mb-12 lg:ud-mb-16"
+              >
+                버릴 물건의 사진을 찍어 업로드 하면  
+                <br>어떤 물건인지 자동으로 인식하고 
+                <br>스티커 가격을 알려드려요.
+                <br>배출 신청까지도 한번에 퍼니버니가 다 해줄게요.
+              </p>
+              <a
+                href="javascript:void(0)"
+                class="ud-inline-flex ud-items-center ud-font-bold ud-text-base ud-text-primary hover:ud-underline"
+              >
+              
+
+            
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== About2 end ===== -->
+
+    <!-- ===== About3 start ===== -->
+    <section class="ud-pt-[100px]">
+      <div class="ud-container">
+        <div class="ud-flex ud-flex-wrap ud-items-center ud--mx-4">
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div
+              class="ud-text-center ud-mb-14 lg:ud-mb-0 wow fadeInUp"
+              data-wow-delay=".2s"
+            >
+              <img
+                src="static/images/about/sharing_mint.svg"
+                alt="image"
+                class="ud-max-full"
+              />
+            </div>
+          </div>
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div
+              class="ud-max-w-[485px] lg:ud-ml-auto wow fadeInUp"
+              data-wow-delay=".3s"
+            >
+              <span
+                class="ud-font-bold ud-text-base ud-text-primary ud-block ud-mb-2"
+              >
+                경제적이게, 소확행
+              </span>
+              <h2
+                class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-leading-tight ud-text-black dark:ud-text-white ud-mb-6"
+              >
+                버리기 아까울땐 나눔으로
+              </h2>
+              <p
+                class="ud-text-lg ud-leading-relaxed ud-text-body-color ud-mb-12 lg:ud-mb-16"
+              >
+                버리기엔 너무 아깝다면 
+                <br>나눔 게시판을 이용해 나눔 해주세요.
+                <br>혹은 마음에 드는 가구를 발견하셨나요? 
+                <br>나눔을 신청해보세요.
+                
+              </p>
+              <a
+                href="javascript:void(0)"
+                class="ud-inline-flex ud-items-center ud-font-bold ud-text-base ud-text-primary hover:ud-underline"
+              >
+               
+
+                
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== About3 end ===== -->
+
+  
+
+    <!-- ===== Download start ===== -->
+    <section id="download" class="ud-pt-14">
+      <div class="ud-container">
+        <div
+          class="ud-bg-gradient-to-l ud-from-gradient-1 ud-to-gradient-2 dark:ud-from-[#3c3e56] dark:ud-to-black ud-rounded-[20px] ud-px-7 sm:ud-px-10 md:ud-px-16 lg:ud-px-14 xl:ud-px-16 wow fadeInUp"
+          data-wow-delay=".2s"
+        >
+          <div class="ud-flex ud-flex-wrap ud-items-end ud--mx-4">
+            <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+              <div class="ud-max-w-[400px] ud-py-16">
+                <span
+                  class="ud-font-bold ud-text-base ud-text-primary ud-block ud-mb-2"
+                >
+                  사용해보기
+                </span>
+                <h2
+                  class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-leading-tight ud-text-black dark:ud-text-white ud-mb-7"
+                >
+                  Funi Buni 다운로드
+                </h2>
+                <p
+                  class="ud-font-medium ud-text-base ud-leading-relaxed ud-text-body-color ud-mb-10"
+                >
+                  아래 QR 코드를 인식시키면 다운로드 화면으로 이동합니다. <br>지금 바로 퍼니버니를 다운받아 체험해보세요.
+                  <br>퍼니버니는 안드로이드를 지원합니다.
+                </p>
+                <div class="ud-flex ud-items-center">
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <img
+  
+                  src="static/images/cta/qr_frame.svg"
+                  alt="git_qr"
+                  
+                />
+                </div>
+              </div>
+            </div>
+            <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+              <div
+                class="ud-relative ud-w-full ud-flex ud-justify-end ud-items-end"
+              >
+                <div class="ud-w-full">
+                  <img
+                    src="static/images/cta/cta-image-1.svg"
+                    alt="image"
+                    class="ud-relative ud-z-10 ud-drop-shadow-image"
+                  />
+                </div>
+                <div class="ud-w-full ud--ml-8">
+                  <img
+                    src="static/images/cta/cta-image-2.svg"
+                    alt="image"
+                    class="ud-relative ud-z-0 ud-drop-shadow-image"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Download end ===== -->
+
+    <!-- ===== AI start ===== -->
+    <section id="ai" class="ud-pt-[100px] ud-overflow-hidden">
+      <div class="ud-container">
+        <div class="ud-flex ud-justify-center ud--mx-4">
+          <div class="ud-w-full ud-px-4">
+            <div
+              class="ud-max-w-[510px] ud-mx-auto ud-text-center ud-mb-[70px] wow fadeInUp"
+              data-wow-delay=".2s"
+            >
+              <h2
+                class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-text-black dark:ud-text-white ud-mb-5"
+              >
+                AI 기술
+              </h2>
+              <p class="ud-font-medium ud-text-base ud-text-body-color">
+                퍼니버니는 이렇게 만들어졌어요.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ud-flex ud-flex-wrap ud--mx-4">
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div class="ud-mb-12 lg:ud-mb-0 ud-relative ud-z-10">
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-border ud-border-[#e4f2fe] ud-rounded-2xl ud-py-12 ud-px-8 sm:ud-p-12 md:ud-py-14 lg:ud-py-10 lg:ud-px-8 xl:ud-p-12 2xl:ud-p-14 wow fadeInUp"
+                data-wow-delay=".3s"
+              >
+                <img
+                src="static/images/about/AI_HUB.svg"
+                alt="image"
+                class="ud-max-full"
+                />
+                  <span
+                  class="ud-font-bold ud-text-base ud-text-primary ud-block ud-mb-2"
+                > <br>
+                  <br>
+                  데이터
+                  </span>
+                  <h2
+                    class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-leading-tight ud-text-black dark:ud-text-white ud-mb-6"
+              >
+                    약 40,000장의 데이터 학습 &nbsp;&nbsp;&nbsp;&nbsp;
+                
+                  </h2>
+                  <p
+                    class="ud-text-lg ud-leading-relaxed ud-text-body-color ud-mb-12 lg:ud-mb-14"
+              >
+                    AI Hub 생활 폐기물 데이터를 활용하고 데이터 증강을 통해 성능을 높였습니다.
+                    
+                    
+                  </p>
+                  <a
+                    href="https://www.aihub.or.kr"
+                    target="_blank"
+                    class="ud-inline-flex ud-items-center ud-font-medium ud-text-base ud-text-primary hover:ud-underline"
+              >
+                    AI_Hub 바로가기
+
+                    <span class="ud-pl-2">
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 28 28"
+                        class="ud-fill-current"
+                  >
+                        <path
+                          d="M16.3333 19.7633V15.0967H5.92666L5.89166 12.7517H16.3333V8.09668L22.1667 13.93L16.3333 19.7633Z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                </div>
+
+              <div class="ud-absolute ud--z-1 ud--left-16 ud-bottom-4">
+                <svg
+                  width="170"
+                  height="198"
+                  viewBox="0 0 170 198"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M115.694 166.387C145.356 149.262 155.508 111.348 138.387 81.6936C121.266 52.0388 83.3556 41.8746 53.6936 59C24.046 76.117 13.8788 114.039 31 143.694C48.1212 173.348 86.046 183.504 115.694 166.387Z"
+                    fill="url(#paint0_radial_100_226)"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M64.6936 109.694C85.686 109.694 102.694 92.6809 102.694 71.6936C102.694 50.7063 85.686 33.6936 64.6936 33.6936C43.7114 33.6936 26.6936 50.7063 26.6936 71.6936C26.6936 92.6809 43.7114 109.694 64.6936 109.694Z"
+                    fill="url(#paint1_radial_100_226)"
+                  />
+                  <circle
+                    cx="72.1069"
+                    cy="51.1106"
+                    r="1.72625"
+                    transform="rotate(-120 72.1069 51.1106)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="98.1196"
+                    cy="36.0928"
+                    r="1.72625"
+                    transform="rotate(-120 98.1196 36.0928)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="59.5491"
+                    cy="58.3611"
+                    r="1.72625"
+                    transform="rotate(-120 59.5491 58.3611)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="84.9638"
+                    cy="43.688"
+                    r="1.72625"
+                    transform="rotate(-120 84.9638 43.688)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="110.976"
+                    cy="28.6695"
+                    r="1.72625"
+                    transform="rotate(-120 110.976 28.6695)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="87.1254"
+                    cy="77.1236"
+                    r="1.72625"
+                    transform="rotate(-120 87.1254 77.1236)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="64.5115"
+                    cy="37.9551"
+                    r="1.72625"
+                    transform="rotate(-120 64.5115 37.9551)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="113.138"
+                    cy="62.1053"
+                    r="1.72625"
+                    transform="rotate(-120 113.138 62.1053)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="90.5241"
+                    cy="22.9371"
+                    r="1.72625"
+                    transform="rotate(-120 90.5241 22.9371)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="74.5676"
+                    cy="84.3741"
+                    r="1.72625"
+                    transform="rotate(-120 74.5676 84.3741)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="51.9537"
+                    cy="45.2054"
+                    r="1.72625"
+                    transform="rotate(-120 51.9537 45.2054)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="99.9822"
+                    cy="69.7005"
+                    r="1.72625"
+                    transform="rotate(-120 99.9822 69.7005)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="77.3682"
+                    cy="30.5323"
+                    r="1.72625"
+                    transform="rotate(-120 77.3682 30.5323)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="125.995"
+                    cy="54.6824"
+                    r="1.72625"
+                    transform="rotate(-120 125.995 54.6824)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="103.381"
+                    cy="15.514"
+                    r="1.72625"
+                    transform="rotate(-120 103.381 15.514)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="79.5299"
+                    cy="63.9678"
+                    r="1.72625"
+                    transform="rotate(-120 79.5299 63.9678)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="56.916"
+                    cy="24.7994"
+                    r="1.72625"
+                    transform="rotate(-120 56.916 24.7994)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="105.543"
+                    cy="48.9498"
+                    r="1.72625"
+                    transform="rotate(-120 105.543 48.9498)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="82.9287"
+                    cy="9.78106"
+                    r="1.72625"
+                    transform="rotate(-120 82.9287 9.78106)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="66.9722"
+                    cy="71.2183"
+                    r="1.72625"
+                    transform="rotate(-120 66.9722 71.2183)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="44.3583"
+                    cy="32.0499"
+                    r="1.72625"
+                    transform="rotate(-120 44.3583 32.0499)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="92.3868"
+                    cy="56.5452"
+                    r="1.72625"
+                    transform="rotate(-120 92.3868 56.5452)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="69.7728"
+                    cy="17.3768"
+                    r="1.72625"
+                    transform="rotate(-120 69.7728 17.3768)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="118.399"
+                    cy="41.5267"
+                    r="1.72625"
+                    transform="rotate(-120 118.399 41.5267)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="95.7854"
+                    cy="2.35821"
+                    r="1.72625"
+                    transform="rotate(-120 95.7854 2.35821)"
+                    fill="#8B5CF6"
+                  />
+                  <defs>
+                    <radialGradient
+                      id="paint0_radial_100_226"
+                      cx="0"
+                      cy="0"
+                      r="1"
+                      gradientUnits="userSpaceOnUse"
+                      gradientTransform="translate(53.6936 59) rotate(60) scale(124)"
+                    >
+                      <stop stop-color="white" />
+                      <stop offset="0.569" stop-color="#faeccd" />
+                      <stop offset="0.993" stop-color="#e8d5a9" />
+                    </radialGradient>
+                    <radialGradient
+                      id="paint1_radial_100_226"
+                      cx="0"
+                      cy="0"
+                      r="1"
+                      gradientUnits="userSpaceOnUse"
+                      gradientTransform="translate(64.6936 33.6936) rotate(90) scale(76)"
+                    >
+                      <stop stop-color="white" />
+                      <stop offset="0.569" stop-color="#ecfadc" />
+                      <stop offset="0.993" stop-color="#d6ebbe" />
+                    </radialGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="ud-w-full lg:ud-w-1/2 ud-px-4">
+            <div class="ud-mb-12 lg:ud-mb-0 ud-relative ud-z-10">
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-border ud-border-[#e4f2fe] ud-rounded-2xl ud-py-12 ud-px-8 sm:ud-p-12 md:ud-py-14 lg:ud-py-10 lg:ud-px-8 xl:ud-p-12 2xl:ud-p-14 wow fadeInUp"
+                data-wow-delay=".4s"
+              > <div class="section">
+                <input type="radio" name="slide" id="slide01" checked>
+                <input type="radio" name="slide" id="slide02">
+                <div class="slidewrap">
+                  
+                  <ul class="slidelist">
+                    <!-- 슬라이드 영역 -->
+                    <li class="slideitem">
+                      <a>
+                        <img src="static/images/about/yolov8_1.svg">
+                      </a>
+                    </li>
+                    <li class="slideitem">
+                      <a>
+      
+                        <img src="static/images/about/yolov8_2.svg">
+                      </a>
+                    </li>
+                    <!-- 좌,우 슬라이드 버튼 -->
+                    <div class="slide-control">
+                      <div>
+                        <label for="slide01" class="left"></label>
+                        <label for="slide02" class="right"></label>
+                      </div>
+                      <div>
+                        <label for="slide02" class="left"></label>
+                        <label for="slide01" class="right"></label>
+                      </div>
+                    </div>
+              
+                  </ul>
+                  <!-- 페이징 -->
+                  <ul class="slide-pagelist">
+                    <li><label for="slide01"></label></li>
+                    <li><label for="slide02"></label></li>
+                  </ul>
+                </div>
+              
+                
+              </div>
+                  <span
+                    class="ud-font-bold ud-text-base ud-text-primary ud-block ud-mb-2"
+            >
+                    AI모델
+                  </span>
+                  <h2
+                    class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-leading-tight ud-text-black dark:ud-text-white ud-mb-6"
+          >
+                    Yolov8을 이용한 AI 분류모델
+                    <br>
+                   
+                    
+                  </h2>
+                  <p
+                    class="ud-text-lg ud-leading-relaxed ud-text-body-color ud-mb-12 lg:ud-mb-16"
+          >
+                    Ultralytics YOLOv8는 최첨단 기술을 적용한 실시간 객체 검출 및 이미지 분할 모델입니다.
+                    퍼니버니는 YOLOv8n를 채택하였습니다.
+                  </p>
+                  <a
+                    href="https://github.com/ultralytics/ultralytics"
+                    target="_blank"
+                    class="ud-inline-flex ud-items-center ud-font-medium ud-text-base ud-text-primary hover:ud-underline"
+                    >
+                    Yolov8 Git_Hub 바로가기
+
+                    <span class="ud-pl-2">
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 28 28"
+                        class="ud-fill-current"
+                        >
+                        <path
+                          d="M16.3333 19.7633V15.0967H5.92666L5.89166 12.7517H16.3333V8.09668L22.1667 13.93L16.3333 19.7633Z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                </div>
+
+              <div class="ud-absolute ud--z-1 ud--right-16 ud--top-12">
+                <svg
+                  width="170"
+                  height="183"
+                  viewBox="0 0 170 183"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M116 138.694C145.662 121.568 155.815 83.655 138.694 54.0002C121.572 24.3454 83.662 14.1812 54 31.3066C24.3524 48.4237 14.1852 86.3454 31.3064 116C48.4276 145.655 86.3524 155.811 116 138.694Z"
+                    fill="url(#paint0_radial_100_227)"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M54 84C74.9924 84 92 66.9873 92 46C92 25.0127 74.9924 8 54 8C33.0178 8 16 25.0127 16 46C16 66.9873 33.0178 84 54 84Z"
+                    fill="url(#paint1_radial_100_227)"
+                  />
+                  <circle
+                    cx="95.3482"
+                    cy="146.68"
+                    r="1.72625"
+                    transform="rotate(-120 95.3482 146.68)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="121.361"
+                    cy="131.663"
+                    r="1.72625"
+                    transform="rotate(-120 121.361 131.663)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="82.7904"
+                    cy="153.931"
+                    r="1.72625"
+                    transform="rotate(-120 82.7904 153.931)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="108.205"
+                    cy="139.258"
+                    r="1.72625"
+                    transform="rotate(-120 108.205 139.258)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="134.218"
+                    cy="124.239"
+                    r="1.72625"
+                    transform="rotate(-120 134.218 124.239)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="110.367"
+                    cy="172.693"
+                    r="1.72625"
+                    transform="rotate(-120 110.367 172.693)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="87.7528"
+                    cy="133.525"
+                    r="1.72625"
+                    transform="rotate(-120 87.7528 133.525)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="136.379"
+                    cy="157.675"
+                    r="1.72625"
+                    transform="rotate(-120 136.379 157.675)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="113.765"
+                    cy="118.507"
+                    r="1.72625"
+                    transform="rotate(-120 113.765 118.507)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="97.8089"
+                    cy="179.944"
+                    r="1.72625"
+                    transform="rotate(-120 97.8089 179.944)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="75.195"
+                    cy="140.775"
+                    r="1.72625"
+                    transform="rotate(-120 75.195 140.775)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="123.223"
+                    cy="165.27"
+                    r="1.72625"
+                    transform="rotate(-120 123.223 165.27)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="100.61"
+                    cy="126.102"
+                    r="1.72625"
+                    transform="rotate(-120 100.61 126.102)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="149.236"
+                    cy="150.252"
+                    r="1.72625"
+                    transform="rotate(-120 149.236 150.252)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="126.622"
+                    cy="111.084"
+                    r="1.72625"
+                    transform="rotate(-120 126.622 111.084)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="102.771"
+                    cy="159.538"
+                    r="1.72625"
+                    transform="rotate(-120 102.771 159.538)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="80.1573"
+                    cy="120.369"
+                    r="1.72625"
+                    transform="rotate(-120 80.1573 120.369)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="128.784"
+                    cy="144.52"
+                    r="1.72625"
+                    transform="rotate(-120 128.784 144.52)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="106.17"
+                    cy="105.351"
+                    r="1.72625"
+                    transform="rotate(-120 106.17 105.351)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="90.2135"
+                    cy="166.788"
+                    r="1.72625"
+                    transform="rotate(-120 90.2135 166.788)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="67.5996"
+                    cy="127.62"
+                    r="1.72625"
+                    transform="rotate(-120 67.5996 127.62)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="115.628"
+                    cy="152.115"
+                    r="1.72625"
+                    transform="rotate(-120 115.628 152.115)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="93.0141"
+                    cy="112.947"
+                    r="1.72625"
+                    transform="rotate(-120 93.0141 112.947)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="141.641"
+                    cy="137.096"
+                    r="1.72625"
+                    transform="rotate(-120 141.641 137.096)"
+                    fill="#8B5CF6"
+                  />
+                  <circle
+                    cx="119.027"
+                    cy="97.928"
+                    r="1.72625"
+                    transform="rotate(-120 119.027 97.928)"
+                    fill="#8B5CF6"
+                  />
+                  <defs>
+                    <radialGradient
+                      id="paint0_radial_100_227"
+                      cx="0"
+                      cy="0"
+                      r="1"
+                      gradientUnits="userSpaceOnUse"
+                      gradientTransform="translate(54 31.3066) rotate(60) scale(124)"
+                    >
+                      <stop stop-color="white" />
+                      <stop offset="0.569" stop-color="#faeccd" />
+                      <stop offset="0.993" stop-color="#e8d5a9" />
+                    </radialGradient>
+                    <radialGradient
+                      id="paint1_radial_100_227"
+                      cx="0"
+                      cy="0"
+                      r="1"
+                      gradientUnits="userSpaceOnUse"
+                      gradientTransform="translate(54 8) rotate(90) scale(76)"
+                    >
+                      <stop stop-color="white" />
+                      <stop offset="0.569" stop-color="#ecfadc" />
+                      <stop offset="0.993" stop-color="#d6ebbe" />
+                    </radialGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== AI end ===== -->
+
+    <!-- ===== Team start ===== -->
+    <section id="team" class="ud-pt-14">
+      <div class="ud-bg-gradient-1 dark:ud-bg-black ud-pt-[100px] ud-pb-[70px]">
+        <div class="ud-container">
+          <div class="ud-flex ud-justify-center ud--mx-4">
+            <div class="ud-w-full ud-px-4">
+              <div
+                class="ud-max-w-[510px] ud-mx-auto ud-text-center ud-mb-[70px] wow fadeInUp"
+                data-wow-delay=".2s"
+              >
+                <h2
+                  class="ud-font-bold ud-text-3xl sm:ud-text-4xl ud-text-black dark:ud-text-white ud-mb-5"
+                >
+                  팀원 소개
+                </h2>
+                <p class="ud-font-semibold ud-text-base ud-text-body-color">
+                  KT AIVLE SCHOOL 3기 수도권 3반 10조
+                </p>
+
+                <a
+                    href="https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10"
+                    target="_blank"
+                    class="ud-inline-flex ud-items-center ud-font-bold ud-text-sm ud-text-primary hover:ud-underline"
+                    >
+                    10조 Git_Hub 바로가기
+
+                    <span class="ud-pl-2">
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 28 28"
+                        class="ud-fill-current"
+                        >
+                        <path
+                          d="M16.3333 19.7633V15.0967H5.92666L5.89166 12.7517H16.3333V8.09668L22.1667 13.93L16.3333 19.7633Z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="ud-flex ud-flex-wrap ud--mx-4 lg:ud--mx-3 xl:ud--mx-4">
+            <div
+              class="ud-w-full md:ud-w-1/2 lg:ud-w-1/3 ud-px-4 lg:ud-px-3 xl:ud-px-4"
+            >
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-p-10 lg:ud-py-8 lg:ud-px-5 xl:ud-p-10 ud-rounded-[20px] ud-rounded-tl-none ud-relative ud-z-10 ud-overflow-hidden ud-mb-10 ud-group hover:ud-bg-primary ud-transition-all ud-shadow-testimonial wow fadeInUp"
+                data-wow-delay=".25s"
+              >
+                <p
+                  class="ud-font-bold ud-text-base ud-text-black dark:ud-text-white ud-mb-9 group-hover:ud-text-white"
+                >
+                  소감 한마디 안녕하세요 김경훈 입니당
+                </p>
+
+                <div class="ud-flex ud-items-center">
+                  <div
+                    class="ud-w-12 ud-h-12 ud-rounded-full ud-overflow-hidden ud-mr-4"
+                  >
+                    <img
+                      src="static/images/testimonial/김경훈_2.png"
+                      alt="image"
+                      class="ud-w-full"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      class="ud-font-bold ud-text-sm ud-text-black dark:ud-text-white group-hover:ud-text-white"
+                    >
+                      김경훈
+                    </h3>
+                    <p
+                      class="ud-font-semibold ud-text-xs ud-text-body-color group-hover:ud-text-white group-hover:ud-text-opacity-70"
+                    >
+                      AI, WEB FE
+                    </p>
+                  </div>
+                </div>
+                
+
+                <span
+                  class="ud-absolute ud-top-0 ud-right-0 ud--z-1 ud-text-primary group-hover:ud-text-white"
+                >
+                  <svg
+                    width="63"
+                    height="30"
+                    viewBox="0 0 63 30"  
+                    >
+                    <circle
+                      cx="7.21563"
+                      cy="10.1013"
+                      r="1.14106"
+                      transform="rotate(-118.771 7.21563 10.1013)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="24.8191"
+                      cy="0.43515"
+                      r="1.14106"
+                      transform="rotate(-118.771 24.8191 0.43515)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="16.7716"
+                      cy="27.5037"
+                      r="1.14106"
+                      transform="rotate(-118.771 16.7716 27.5037)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="2.38256"
+                      cy="1.2995"
+                      r="1.14106"
+                      transform="rotate(-118.771 2.38256 1.2995)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="25.5737"
+                      cy="22.6717"
+                      r="1.14106"
+                      transform="rotate(-118.771 25.5737 22.6717)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="34.3754"
+                      cy="17.8386"
+                      r="1.14106"
+                      transform="rotate(-118.771 34.3754 17.8386)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="43.1771"
+                      cy="13.0056"
+                      r="1.14106"
+                      transform="rotate(-118.771 43.1771 13.0056)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="51.9788"
+                      cy="8.17249"
+                      r="1.14106"
+                      transform="rotate(-118.771 51.9788 8.17249)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="60.5805"
+                      cy="3.44925"
+                      r="1.14106"
+                      transform="rotate(-118.771 60.5805 3.44925)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="11.9389"
+                      cy="18.7029"
+                      r="1.14106"
+                      transform="rotate(-118.771 11.9389 18.7029)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="20.7405"
+                      cy="13.8698"
+                      r="1.14106"
+                      transform="rotate(-118.771 20.7405 13.8698)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="29.5423"
+                      cy="9.0368"
+                      r="1.14106"
+                      transform="rotate(-118.771 29.5423 9.0368)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="38.344"
+                      cy="4.2038"
+                      r="1.14106"
+                      transform="rotate(-118.771 38.344 4.2038)"
+                      fill="#8B5CF6"
+                    />
+                    <circle
+                      cx="47.1458"
+                      cy="-0.62915"
+                      r="1.14106"
+                      transform="rotate(-118.771 47.1458 -0.62915)"
+                      fill="#8B5CF6"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="ud-w-full md:ud-w-1/2 lg:ud-w-1/3 ud-px-4 lg:ud-px-3 xl:ud-px-4"
+            >
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-p-10 lg:ud-py-8 lg:ud-px-5 xl:ud-p-10 ud-rounded-[20px] ud-rounded-tl-none ud-relative ud-z-10 ud-overflow-hidden ud-mb-10 ud-group hover:ud-bg-primary ud-transition-all ud-shadow-testimonial wow fadeInUp"
+                data-wow-delay=".3s"
+              >
+                <p
+                  class="ud-font-bold ud-text-base ud-text-black dark:ud-text-white ud-mb-9 group-hover:ud-text-white"
+                >
+                  소감 한마디 안녕하세요 김선하입니당
+                </p>
+
+                <div class="ud-flex ud-items-center">
+                  <div
+                    class="ud-w-12 ud-h-12 ud-rounded-full ud-overflow-hidden ud-mr-4"
+                  >
+                    <img
+                      src="static/images/testimonial/김선하_2.jpg"
+                      alt="image"
+                      class="ud-w-full"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      class="ud-font-bold ud-text-sm ud-text-black dark:ud-text-white group-hover:ud-text-white"
+                    >
+                      김선하
+                    </h3>
+                    <p
+                      class="ud-font-semibold ud-text-xs ud-text-body-color group-hover:ud-text-white group-hover:ud-text-opacity-70"
+                    >
+                      AI, WEB FE
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  class="ud-absolute ud-top-0 ud-right-0 ud--z-1 ud-text-primary group-hover:ud-text-white"
+                >
+                <svg
+                width="63"
+                height="30"
+                viewBox="0 0 63 30"  
+                >
+                <circle
+                  cx="7.21563"
+                  cy="10.1013"
+                  r="1.14106"
+                  transform="rotate(-118.771 7.21563 10.1013)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="24.8191"
+                  cy="0.43515"
+                  r="1.14106"
+                  transform="rotate(-118.771 24.8191 0.43515)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="16.7716"
+                  cy="27.5037"
+                  r="1.14106"
+                  transform="rotate(-118.771 16.7716 27.5037)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="2.38256"
+                  cy="1.2995"
+                  r="1.14106"
+                  transform="rotate(-118.771 2.38256 1.2995)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="25.5737"
+                  cy="22.6717"
+                  r="1.14106"
+                  transform="rotate(-118.771 25.5737 22.6717)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="34.3754"
+                  cy="17.8386"
+                  r="1.14106"
+                  transform="rotate(-118.771 34.3754 17.8386)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="43.1771"
+                  cy="13.0056"
+                  r="1.14106"
+                  transform="rotate(-118.771 43.1771 13.0056)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="51.9788"
+                  cy="8.17249"
+                  r="1.14106"
+                  transform="rotate(-118.771 51.9788 8.17249)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="60.5805"
+                  cy="3.44925"
+                  r="1.14106"
+                  transform="rotate(-118.771 60.5805 3.44925)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="11.9389"
+                  cy="18.7029"
+                  r="1.14106"
+                  transform="rotate(-118.771 11.9389 18.7029)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="20.7405"
+                  cy="13.8698"
+                  r="1.14106"
+                  transform="rotate(-118.771 20.7405 13.8698)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="29.5423"
+                  cy="9.0368"
+                  r="1.14106"
+                  transform="rotate(-118.771 29.5423 9.0368)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="38.344"
+                  cy="4.2038"
+                  r="1.14106"
+                  transform="rotate(-118.771 38.344 4.2038)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="47.1458"
+                  cy="-0.62915"
+                  r="1.14106"
+                  transform="rotate(-118.771 47.1458 -0.62915)"
+                  fill="#8B5CF6"
+                />
+              </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="ud-w-full md:ud-w-1/2 lg:ud-w-1/3 ud-px-4 lg:ud-px-3 xl:ud-px-4"
+            >
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-p-10 lg:ud-py-8 lg:ud-px-5 xl:ud-p-10 ud-rounded-[20px] ud-rounded-tl-none ud-relative ud-z-10 ud-overflow-hidden ud-mb-10 ud-group hover:ud-bg-primary ud-transition-all ud-shadow-testimonial wow fadeInUp"
+                data-wow-delay=".35s"
+              >
+                <p
+                  class="ud-font-bold ud-text-base ud-text-black dark:ud-text-white ud-mb-9 group-hover:ud-text-white"
+                >
+                  소감 한마디 안녕하세요 김세상 입니당
+                </p>
+
+                <div class="ud-flex ud-items-center">
+                  <div
+                    class="ud-w-12 ud-h-12 ud-rounded-full ud-overflow-hidden ud-mr-4"
+                  >
+                    <img
+                      src="static/images/testimonial/김세상_2.jpg"
+                      alt="image"
+                      class="ud-w-full"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      class="ud-font-bold ud-text-sm ud-text-black dark:ud-text-white group-hover:ud-text-white"
+                    >
+                      김세상
+                    </h3>
+                    <p
+                      class="ud-font-semibold ud-text-xs ud-text-body-color group-hover:ud-text-white group-hover:ud-text-opacity-70"
+                    >
+                      AI, MLOps, APP BE
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  class="ud-absolute ud-top-0 ud-right-0 ud--z-1 ud-text-primary group-hover:ud-text-white"
+                >
+                <svg
+                width="63"
+                height="30"
+                viewBox="0 0 63 30"  
+                >
+                <circle
+                  cx="7.21563"
+                  cy="10.1013"
+                  r="1.14106"
+                  transform="rotate(-118.771 7.21563 10.1013)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="24.8191"
+                  cy="0.43515"
+                  r="1.14106"
+                  transform="rotate(-118.771 24.8191 0.43515)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="16.7716"
+                  cy="27.5037"
+                  r="1.14106"
+                  transform="rotate(-118.771 16.7716 27.5037)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="2.38256"
+                  cy="1.2995"
+                  r="1.14106"
+                  transform="rotate(-118.771 2.38256 1.2995)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="25.5737"
+                  cy="22.6717"
+                  r="1.14106"
+                  transform="rotate(-118.771 25.5737 22.6717)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="34.3754"
+                  cy="17.8386"
+                  r="1.14106"
+                  transform="rotate(-118.771 34.3754 17.8386)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="43.1771"
+                  cy="13.0056"
+                  r="1.14106"
+                  transform="rotate(-118.771 43.1771 13.0056)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="51.9788"
+                  cy="8.17249"
+                  r="1.14106"
+                  transform="rotate(-118.771 51.9788 8.17249)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="60.5805"
+                  cy="3.44925"
+                  r="1.14106"
+                  transform="rotate(-118.771 60.5805 3.44925)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="11.9389"
+                  cy="18.7029"
+                  r="1.14106"
+                  transform="rotate(-118.771 11.9389 18.7029)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="20.7405"
+                  cy="13.8698"
+                  r="1.14106"
+                  transform="rotate(-118.771 20.7405 13.8698)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="29.5423"
+                  cy="9.0368"
+                  r="1.14106"
+                  transform="rotate(-118.771 29.5423 9.0368)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="38.344"
+                  cy="4.2038"
+                  r="1.14106"
+                  transform="rotate(-118.771 38.344 4.2038)"
+                  fill="#8B5CF6"
+                />
+                <circle
+                  cx="47.1458"
+                  cy="-0.62915"
+                  r="1.14106"
+                  transform="rotate(-118.771 47.1458 -0.62915)"
+                  fill="#8B5CF6"
+                />
+              </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="ud-w-full md:ud-w-1/2 lg:ud-w-1/3 ud-px-4 lg:ud-px-3 xl:ud-px-4"
+            >
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-p-10 lg:ud-py-8 lg:ud-px-5 xl:ud-p-10 ud-rounded-[20px] ud-rounded-tl-none ud-relative ud-z-10 ud-overflow-hidden ud-mb-10 ud-group hover:ud-bg-primary ud-transition-all ud-shadow-testimonial wow fadeInUp"
+                data-wow-delay=".4s"
+              >
+                <p
+                  class="ud-font-bold ud-text-base ud-text-black dark:ud-text-white ud-mb-9 group-hover:ud-text-white"
+                >
+                  소감 한마디 안녕하세요 김현우 입니당
+                </p>
+
+                <div class="ud-flex ud-items-center">
+                  <div
+                    class="ud-w-12 ud-h-12 ud-rounded-full ud-overflow-hidden ud-mr-4"
+                  >
+                    <img
+                      src="static/images/testimonial/김현우_2.jpg"
+                      alt="image"
+                      class="ud-w-full"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      class="ud-font-bold ud-text-sm ud-text-black dark:ud-text-white group-hover:ud-text-white"
+                    >
+                      김현우
+                    </h3>
+                    <p
+                      class="ud-font-semibold ud-text-xs ud-text-body-color group-hover:ud-text-white group-hover:ud-text-opacity-70"
+                    >
+                      AI, WEB FE
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  class="ud-absolute ud-top-0 ud-right-0 ud--z-1 ud-text-primary group-hover:ud-text-white"
+                >
+                  <svg
+                    width="63"
+                    height="30"
+                    viewBox="0 0 63 30"
+                    class="ud-fill-current"
+                  >
+                    <circle
+                      cx="7.21563"
+                      cy="10.1013"
+                      r="1.14106"
+                      transform="rotate(-118.771 7.21563 10.1013)"
+                    />
+                    <circle
+                      cx="24.8191"
+                      cy="0.43515"
+                      r="1.14106"
+                      transform="rotate(-118.771 24.8191 0.43515)"
+                    />
+                    <circle
+                      cx="16.7716"
+                      cy="27.5037"
+                      r="1.14106"
+                      transform="rotate(-118.771 16.7716 27.5037)"
+                    />
+                    <circle
+                      cx="2.38256"
+                      cy="1.2995"
+                      r="1.14106"
+                      transform="rotate(-118.771 2.38256 1.2995)"
+                    />
+                    <circle
+                      cx="25.5737"
+                      cy="22.6717"
+                      r="1.14106"
+                      transform="rotate(-118.771 25.5737 22.6717)"
+                    />
+                    <circle
+                      cx="34.3754"
+                      cy="17.8386"
+                      r="1.14106"
+                      transform="rotate(-118.771 34.3754 17.8386)"
+                    />
+                    <circle
+                      cx="43.1771"
+                      cy="13.0056"
+                      r="1.14106"
+                      transform="rotate(-118.771 43.1771 13.0056)"
+                    />
+                    <circle
+                      cx="51.9788"
+                      cy="8.17249"
+                      r="1.14106"
+                      transform="rotate(-118.771 51.9788 8.17249)"
+                    />
+                    <circle
+                      cx="60.5805"
+                      cy="3.44925"
+                      r="1.14106"
+                      transform="rotate(-118.771 60.5805 3.44925)"
+                    />
+                    <circle
+                      cx="11.9389"
+                      cy="18.7029"
+                      r="1.14106"
+                      transform="rotate(-118.771 11.9389 18.7029)"
+                    />
+                    <circle
+                      cx="20.7405"
+                      cy="13.8698"
+                      r="1.14106"
+                      transform="rotate(-118.771 20.7405 13.8698)"
+                    />
+                    <circle
+                      cx="29.5423"
+                      cy="9.0368"
+                      r="1.14106"
+                      transform="rotate(-118.771 29.5423 9.0368)"
+                    />
+                    <circle
+                      cx="38.344"
+                      cy="4.2038"
+                      r="1.14106"
+                      transform="rotate(-118.771 38.344 4.2038)"
+                    />
+                    <circle
+                      cx="47.1458"
+                      cy="-0.62915"
+                      r="1.14106"
+                      transform="rotate(-118.771 47.1458 -0.62915)"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="ud-w-full md:ud-w-1/2 lg:ud-w-1/3 ud-px-4 lg:ud-px-3 xl:ud-px-4"
+            >
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-p-10 lg:ud-py-8 lg:ud-px-5 xl:ud-p-10 ud-rounded-[20px] ud-rounded-tl-none ud-relative ud-z-10 ud-overflow-hidden ud-mb-10 ud-group hover:ud-bg-primary ud-transition-all ud-shadow-testimonial wow fadeInUp"
+                data-wow-delay=".45s"
+              >
+                <p
+                  class="ud-font-bold ud-text-base ud-text-black dark:ud-text-white ud-mb-9 group-hover:ud-text-white"
+                >
+                  소감 한마디 안녕하세요 어남준 입니당
+                </p>
+
+                <div class="ud-flex ud-items-center">
+                  <div
+                    class="ud-w-12 ud-h-12 ud-rounded-full ud-overflow-hidden ud-mr-4"
+                  >
+                    <img
+                      src="static/images/testimonial/어남준_2.jpg"
+                      alt="image"
+                      class="ud-w-full"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      class="ud-font-bold ud-text-sm ud-text-black dark:ud-text-white group-hover:ud-text-white"
+                    >
+                      어남준
+                    </h3>
+                    <p
+                      class="ud-font-semibold ud-text-xs ud-text-body-color group-hover:ud-text-white group-hover:ud-text-opacity-70"
+                    >
+                      APP BE, DB
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  class="ud-absolute ud-top-0 ud-right-0 ud--z-1 ud-text-primary group-hover:ud-text-white"
+                >
+                  <svg
+                    width="63"
+                    height="30"
+                    viewBox="0 0 63 30"
+                    class="ud-fill-current"
+                  >
+                    <circle
+                      cx="7.21563"
+                      cy="10.1013"
+                      r="1.14106"
+                      transform="rotate(-118.771 7.21563 10.1013)"
+                    />
+                    <circle
+                      cx="24.8191"
+                      cy="0.43515"
+                      r="1.14106"
+                      transform="rotate(-118.771 24.8191 0.43515)"
+                    />
+                    <circle
+                      cx="16.7716"
+                      cy="27.5037"
+                      r="1.14106"
+                      transform="rotate(-118.771 16.7716 27.5037)"
+                    />
+                    <circle
+                      cx="2.38256"
+                      cy="1.2995"
+                      r="1.14106"
+                      transform="rotate(-118.771 2.38256 1.2995)"
+                    />
+                    <circle
+                      cx="25.5737"
+                      cy="22.6717"
+                      r="1.14106"
+                      transform="rotate(-118.771 25.5737 22.6717)"
+                    />
+                    <circle
+                      cx="34.3754"
+                      cy="17.8386"
+                      r="1.14106"
+                      transform="rotate(-118.771 34.3754 17.8386)"
+                    />
+                    <circle
+                      cx="43.1771"
+                      cy="13.0056"
+                      r="1.14106"
+                      transform="rotate(-118.771 43.1771 13.0056)"
+                    />
+                    <circle
+                      cx="51.9788"
+                      cy="8.17249"
+                      r="1.14106"
+                      transform="rotate(-118.771 51.9788 8.17249)"
+                    />
+                    <circle
+                      cx="60.5805"
+                      cy="3.44925"
+                      r="1.14106"
+                      transform="rotate(-118.771 60.5805 3.44925)"
+                    />
+                    <circle
+                      cx="11.9389"
+                      cy="18.7029"
+                      r="1.14106"
+                      transform="rotate(-118.771 11.9389 18.7029)"
+                    />
+                    <circle
+                      cx="20.7405"
+                      cy="13.8698"
+                      r="1.14106"
+                      transform="rotate(-118.771 20.7405 13.8698)"
+                    />
+                    <circle
+                      cx="29.5423"
+                      cy="9.0368"
+                      r="1.14106"
+                      transform="rotate(-118.771 29.5423 9.0368)"
+                    />
+                    <circle
+                      cx="38.344"
+                      cy="4.2038"
+                      r="1.14106"
+                      transform="rotate(-118.771 38.344 4.2038)"
+                    />
+                    <circle
+                      cx="47.1458"
+                      cy="-0.62915"
+                      r="1.14106"
+                      transform="rotate(-118.771 47.1458 -0.62915)"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="ud-w-full md:ud-w-1/2 lg:ud-w-1/3 ud-px-4 lg:ud-px-3 xl:ud-px-4"
+            >
+              <div
+                class="ud-bg-white dark:ud-bg-dark ud-p-10 lg:ud-py-8 lg:ud-px-5 xl:ud-p-10 ud-rounded-[20px] ud-rounded-tl-none ud-relative ud-z-10 ud-overflow-hidden ud-mb-10 ud-group hover:ud-bg-primary ud-transition-all ud-shadow-testimonial wow fadeInUp"
+                data-wow-delay=".5s"
+              >
+                <p
+                  class="ud-font-bold ud-text-base ud-text-black dark:ud-text-white ud-mb-9 group-hover:ud-text-white"
+                >
+                  소감 한마디 안녕하세요 조성록 입니당
+                </p>
+
+                <div class="ud-flex ud-items-center">
+                  <div
+                    class="ud-w-12 ud-h-12 ud-rounded-full ud-overflow-hidden ud-mr-4"
+                  >
+                    <img
+                      src="static/images/testimonial/조성록_2.jpg"
+                      alt="image"
+                      class="ud-w-full"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      class="ud-font-bold ud-text-sm ud-text-black dark:ud-text-white group-hover:ud-text-white"
+                    >
+                      조성록
+                    </h3>
+                    <p
+                      class="ud-font-semibold ud-text-xs ud-text-body-color group-hover:ud-text-white group-hover:ud-text-opacity-70"
+                    >
+                      APP FE, DB
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  class="ud-absolute ud-top-0 ud-right-0 ud--z-1 ud-text-primary group-hover:ud-text-white"
+                >
+                  <svg
+                    width="63"
+                    height="30"
+                    viewBox="0 0 63 30"
+                    class="ud-fill-current"
+                  >
+                    <circle
+                      cx="7.21563"
+                      cy="10.1013"
+                      r="1.14106"
+                      transform="rotate(-118.771 7.21563 10.1013)"
+                    />
+                    <circle
+                      cx="24.8191"
+                      cy="0.43515"
+                      r="1.14106"
+                      transform="rotate(-118.771 24.8191 0.43515)"
+                    />
+                    <circle
+                      cx="16.7716"
+                      cy="27.5037"
+                      r="1.14106"
+                      transform="rotate(-118.771 16.7716 27.5037)"
+                    />
+                    <circle
+                      cx="2.38256"
+                      cy="1.2995"
+                      r="1.14106"
+                      transform="rotate(-118.771 2.38256 1.2995)"
+                    />
+                    <circle
+                      cx="25.5737"
+                      cy="22.6717"
+                      r="1.14106"
+                      transform="rotate(-118.771 25.5737 22.6717)"
+                    />
+                    <circle
+                      cx="34.3754"
+                      cy="17.8386"
+                      r="1.14106"
+                      transform="rotate(-118.771 34.3754 17.8386)"
+                    />
+                    <circle
+                      cx="43.1771"
+                      cy="13.0056"
+                      r="1.14106"
+                      transform="rotate(-118.771 43.1771 13.0056)"
+                    />
+                    <circle
+                      cx="51.9788"
+                      cy="8.17249"
+                      r="1.14106"
+                      transform="rotate(-118.771 51.9788 8.17249)"
+                    />
+                    <circle
+                      cx="60.5805"
+                      cy="3.44925"
+                      r="1.14106"
+                      transform="rotate(-118.771 60.5805 3.44925)"
+                    />
+                    <circle
+                      cx="11.9389"
+                      cy="18.7029"
+                      r="1.14106"
+                      transform="rotate(-118.771 11.9389 18.7029)"
+                    />
+                    <circle
+                      cx="20.7405"
+                      cy="13.8698"
+                      r="1.14106"
+                      transform="rotate(-118.771 20.7405 13.8698)"
+                    />
+                    <circle
+                      cx="29.5423"
+                      cy="9.0368"
+                      r="1.14106"
+                      transform="rotate(-118.771 29.5423 9.0368)"
+                    />
+                    <circle
+                      cx="38.344"
+                      cy="4.2038"
+                      r="1.14106"
+                      transform="rotate(-118.771 38.344 4.2038)"
+                    />
+                    <circle
+                      cx="47.1458"
+                      cy="-0.62915"
+                      r="1.14106"
+                      transform="rotate(-118.771 47.1458 -0.62915)"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Team end ===== -->
+ 
+
+
+
+
+
+    <!-- ===== Footer start ===== -->
+    <footer id="footer">
+      
+      
+      <div
+        class="ud-bg-white dark:ud-bg-dark ud-p-7 wow fadeInUp"
+        data-wow-delay=".25s"
+      >
+        <p
+          class="ud-font-semibold ud-text-base ud-text-body-color ud-text-center"
+        >
+          KT AIVLE SCHOOL 3RD TEAM 10@FUNI BUNI.
+        </p>
+      </div>
+    </footer>
+    <!-- ===== Footer end ===== -->
+
+    <!-- ====== Back To Top Start -->
+    <a
+      x-show="scrolledFromTop"
+      href="javascript:void(0)"
+      class="ud-flex ud-items-center ud-justify-center ud-bg-primary ud-text-white ud-w-10 ud-h-10 ud-rounded-lg ud-fixed ud-bottom-8 ud-right-8 ud-left-auto ud-z-[999] hover:ud-shadow-signUp ud-transition back-to-top ud-shadow-md"
+    >
+      <span
+        class="ud-w-3 ud-h-3 ud-border-t ud-border-l ud-border-white ud-rotate-45 ud-mt-[6px]"
+      ></span>
+    </a>
+    <!-- ====== Back To Top End -->
+
+    <!-- ===== JS Files ====== -->
+    <script src="static/js/glightbox.min.js"></script>
+    <script src="static/js/main.js"></script>
+    <script>
+      // ==== for menu scroll
+      const pageLink = document.querySelectorAll(".menu-scroll");
+
+      pageLink.forEach((elem) => {
+        elem.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.querySelector(elem.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+            offsetTop: 1 - 60,
+          });
+        });
+      });
+
+      // section menu active
+      function onScroll(event) {
+        const sections = document.querySelectorAll(".scroll-menu");
+        const scrollPos =
+          window.pageYOffset ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop;
+
+        for (let i = 0; i < sections.length; i++) {
+          const currLink = sections[i];
+          const val = currLink.getAttribute("href");
+          const refElement = document.querySelector(val);
+          const scrollTopMinus = scrollPos + 73;
+          if (
+            refElement.offsetTop <= scrollTopMinus &&
+            refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
+          ) {
+            document
+              .querySelector(".scroll-menu")
+              .classList.remove("ud-text-primary");
+            currLink.classList.add("ud-text-primary");
+          } else {
+            currLink.classList.remove("ud-text-primary");
+          }
+        }
+      }
+
+      window.document.addEventListener("scroll", onScroll);
+
+      //========= glightbox
+      GLightbox({
+        href: "https://youtu.be/NQD3SBz3Oqw",
+        type: "video",
+        source: "youtube", //vimeo, youtube or local
+        width: 900,
+        autoplayVideos: true,
+      });
+    </script>
+  </body>
+</html>
