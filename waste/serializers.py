@@ -33,7 +33,7 @@ class WasteDisposalApplySerializer(serializers.ModelSerializer):
         null_data = {key: value for key, value in data.items() if value is not None}
         if null_data.get('apply_binary') == 0:
             return {}
-        return cleaned_data
+        return null_data
 
 #모든 폐기물 품목 분류표 정보
 
