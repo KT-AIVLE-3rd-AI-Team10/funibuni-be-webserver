@@ -43,25 +43,34 @@ def burni_list(request):
     }
     
     return Response(data)
-
+# /@api_view(['GET', 'DELETE'])
+# @permission_classes([IsAuthenticated])
+# def waste_detail(request, waste_id):
+#     waste = UrlImages.objects.get(waste_id=waste_id)
+    
+#     if request.method == 'GET':
+#         try:
+#             serializer = WasteDisposalApplySerializer(waste)
+#             return Response(serializer.data)
+#         except UrlImages.DoesNotExist:
+#             return Response({"error": "Detail not found"}, status=404)
+        
+#     elif request.method == 'DELETE':
+#         waste.delete()
+#         return JsonResponse({'message': 'Deleted successfully'}, status=200)
+    
+#     else:
+#         # 잘못된 요청 메소드에 대한 에러 메시지를 반환합니다.
+#         return JsonResponse({'error': 'Invalid HTTP method'}, status=400)
+# /
 #배출 내역 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def waste_list(request, waste_id):
-    waste = UrlImages.objects.get(waste_id=waste_id)
-    
-    if request.method == 'GET':
-        try:
-            serializer = WasteDisposalApplySerializer(waste)
-            return Response(serializer.data)
-        except UrlImages.DoesNotExist:
-            return Response({"error": "Detail not found"}, status=404)
-# def waste_list(request):
-#     user = request.user
-#     urlimages = UrlImages.objects.filter(user=user)  # 현재 사용자가 신청한 폐기물 이미지만 필터링
-    
-#     serializer = WasteDisposalApplySerializer(urlimages, many=True)
-#     return Response(serializer.data)
+def waste_list(request):
+    user = request.user
+    urlimages = UrlImages.objects.filter(user=user,apply_binary=1)  
+    serializer = WasteDisposalApplySerializer(urlimages, many=True)
+    return Response(serializer.data)
 
 #나눔 내역 리스트
 @api_view(['GET'])
