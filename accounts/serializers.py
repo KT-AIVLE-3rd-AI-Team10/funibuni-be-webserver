@@ -2,8 +2,6 @@ from rest_framework import serializers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from accounts.models import User,Address
 
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

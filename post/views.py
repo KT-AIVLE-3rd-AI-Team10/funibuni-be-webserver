@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
 from post.serializers import PostSerializer,PostReportSerializer,PostLikeSerializer,CommentReportSerializer,CommentSerializer,ReplySerializer,ReplyReportSerializer,PostdetailSerializer
@@ -30,10 +31,10 @@ def post_list(request):
     
 #게시판 상세,수정,삭제
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def post_detail(request, post_id):
     try:
-        post = Post.objects.get(pk=post_id, user=request.user)
+        post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return Response({'error': '게시물을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':

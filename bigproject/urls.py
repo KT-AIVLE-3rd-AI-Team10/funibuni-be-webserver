@@ -21,8 +21,10 @@ from post.views import create_post,post_detail,post_list,update_sharing,create_p
 from waste.views import image_upload, waste_apply, waste_songpa, waste_detail
 from myburni.views import liked_posts,comment_list,list_post,waste_list,burni_list
 from django.shortcuts import render
+
 def index(request):
     return render(request,'index.html')
+
 urlpatterns = [
     #회원가입/로그인/로그아웃/주소
     path("admin/", admin.site.urls),
@@ -64,9 +66,5 @@ urlpatterns = [
     
     #프론트 웹
     path('',index),
-
-
-    
-    
 ]
     
