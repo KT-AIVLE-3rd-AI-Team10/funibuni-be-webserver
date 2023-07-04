@@ -31,7 +31,7 @@ def get_secret(setting):
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30000),  # Access 토큰의 유효 기간 설정
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Access 토큰의 유효 기간 설정
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),     # Refresh 토큰의 유효 기간 설정
     
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken', 'rest_framework_simplejwt.tokens.RefreshToken'),
