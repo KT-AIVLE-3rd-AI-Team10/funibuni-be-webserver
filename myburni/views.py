@@ -47,12 +47,21 @@ def burni_list(request):
 #배출 내역 리스트
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def waste_list(request):
-    user = request.user
-    urlimages = UrlImages.objects.filter(user=user)  # 현재 사용자가 신청한 폐기물 이미지만 필터링
+def waste_list(request, waste_id):
+    waste = UrlImages.objects.get(waste_id=waste_id)
     
-    serializer = WasteDisposalApplySerializer(urlimages, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        try:
+            serializer = WasteDisposalApplySerializer(waste)
+            return Response(serializer.data)
+        except UrlImages.DoesNotExist:
+            return Response({"error": "Detail not found"}, status=404)
+# def waste_list(request):
+#     user = request.user
+#     urlimages = UrlImages.objects.filter(user=user)  # 현재 사용자가 신청한 폐기물 이미지만 필터링
+    
+#     serializer = WasteDisposalApplySerializer(urlimages, many=True)
+#     return Response(serializer.data)
 
 #나눔 내역 리스트
 @api_view(['GET'])
