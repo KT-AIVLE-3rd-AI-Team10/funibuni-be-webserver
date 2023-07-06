@@ -35,8 +35,4 @@ class WasteDisposalApplySerializer(serializers.ModelSerializer):
             return {}
         return null_data
 
-#모든 폐기물 품목 분류표 정보
 
-#폐기물 배출 신청
-
-#폐기물 배출 신청 상세정보

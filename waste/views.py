@@ -44,7 +44,6 @@ def waste_detail(request, waste_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def waste_songpa(request):
-    #WasteSpec.objects.all().delete()
     df = pd.read_excel('waste/대형폐기물분류표_송파구.xlsx', sheet_name='퍼니버니', engine='openpyxl')
     
     for index, row in df.iterrows():
@@ -112,10 +111,10 @@ def image_upload(request):
         path = default_storage.save(image_name, ContentFile(image.read()))
         file_name = os.path.join('media/', image_name)
         object_name = os.path.join('django/', image_name)
-        # Boto3를 사용하여 S3 클라이언트를 생성합니다.
-        # 'aws_access_key_id', 'aws_secret_access_key'는
-        # 실제 AWS 접근 키와 비밀 키로 교체해야 합니다.
-        # 'region_name'도 실제 S3 버킷이 위치한 지역으로 교체해야 합니다.
+        #Boto3를 사용하여 S3 클라이언트를 생성합니다.
+        #'aws_access_key_id', 'aws_secret_access_key'는
+        #실제 AWS 접근 키와 비밀 키로 교체해야 합니다.
+        #'region_name'도 실제 S3 버킷이 위치한 지역으로 교체해야 합니다.
         with open('secrets.json') as f:
             secrets = json.load(f)
             
@@ -126,8 +125,8 @@ def image_upload(request):
             #region_name='your_region_name' 
         )
 
-        # S3에 이미지를 업로드합니다.
-        # 'your_bucket_name'은 실제 S3 버킷 이름으로 교체해야 합니다.
+        #S3에 이미지를 업로드합니다.
+        #'your_bucket_name'은 실제 S3 버킷 이름으로 교체해야 합니다.
         s3_client.upload_file(file_name, 'furni', object_name)
         s3_url = f"https://furni.s3.ap-northeast-2.amazonaws.com/{object_name}"
         
@@ -135,13 +134,13 @@ def image_upload(request):
         new_image = UrlImages(image_title=image_name, image_url=s3_url, user = request.user) #timezone.now()
         new_image.save()
         
-        ######## 모델링
+        #모델링
         yolo_model = YOLO('waste/yolo/large_best_model/best.pt')
         
         #file_name = os.path.join('/', s3_url)
         result = yolo_model.predict(source=s3_url, save=True, save_txt = True, save_conf = True, conf = 0.1) 
         
-        ######## 라벨, 확률 추출
+        #라벨, 확률 추출
         directory_path = "runs/detect/predict/labels/"
         directory_path2 = "runs/detect/predict2/labels/"
         
