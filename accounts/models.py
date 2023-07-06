@@ -8,9 +8,9 @@ class UserManager(BaseUserManager):
         if not name:
             raise ValueError('The name field must be set')
 
-        nickname = self.generate_nickname(name)  # 닉네임 생성
+        nickname = self.generate_nickname(name)  
 
-        extra_fields['nickname'] = nickname  # extra_fields에 nickname 추가
+        extra_fields['nickname'] = nickname  
         
         user = self.model(phone_number=phone_number, name=name, **extra_fields)
         user.set_password(password)

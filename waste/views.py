@@ -72,16 +72,16 @@ def waste_songpa(request):
 @permission_classes([IsAuthenticated])
 def waste_apply(request):
     waste_id = request.data.get('waste_id')
-    waste_spec_id = request.data.get('waste_spec_id')  # Get waste_spec_id from the request
+    waste_spec_id = request.data.get('waste_spec_id') 
     if waste_id is None or waste_spec_id is None:
         return Response({"error": "No waste_id or waste_spec_id provided."}, status=400)
     try:
         urlimages = UrlImages.objects.get(waste_id=waste_id)
-        waste_spec = WasteSpec.objects.get(waste_spec_id=waste_spec_id)  # Get WasteSpec object with the provided id
-    except (UrlImages.DoesNotExist, WasteSpec.DoesNotExist):  # Catch the exception if either object does not exist
+        waste_spec = WasteSpec.objects.get(waste_spec_id=waste_spec_id)  
+    except (UrlImages.DoesNotExist, WasteSpec.DoesNotExist):  
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    urlimages.waste_spec_id = waste_spec  # Assign the WasteSpec object, not just the id
+    urlimages.waste_spec_id = waste_spec  
     urlimages.apply_binary = 1
     urlimages.postal_code = request.data.get('postal_code')
     urlimages.address_full_lend = request.data.get('address_full_lend')
@@ -233,7 +233,6 @@ def image_upload(request):
         
         ## 서버에 남은 불필요한 파일 삭제
         cwd = os.getcwd()
-        #parent_dir = os.path.dirname(cwd)
         path_to_remove = os.path.join(cwd, 'runs')
         shutil.rmtree(path_to_remove)
         default_storage.delete(path) 

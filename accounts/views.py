@@ -136,7 +136,6 @@ def token_refresh(request):
 #로그아웃 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-# @authentication_classes([JWTAuthenticationForRefresh])
 def user_logout_view(request):
     refresh_token = request.headers.get('Authorization')
 

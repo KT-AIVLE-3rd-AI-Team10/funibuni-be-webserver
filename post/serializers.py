@@ -6,7 +6,7 @@ from django.db.models import Count
 
 # 게시판
 class PostSerializer(serializers.ModelSerializer):
-    is_sharing = serializers.BooleanField(default=False)  # 기본값으로 0 설정
+    is_sharing = serializers.BooleanField(default=False) 
     user = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
@@ -44,7 +44,7 @@ class PostReportSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # 게시물을 신고한 사용자와 현재 인증된 사용자가 동일한 경우, 게시물을 숨김
         if instance.post.reports.filter(user=self.context['request'].user).exists():
-            return {}  # 빈 딕셔너리로 게시물을 숨김 처리합니다.
+            return {}  
 
         return super().to_representation(instance)
 
@@ -66,7 +66,7 @@ class CommentReportSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # 댓글을 신고한 사용자와 현재 인증된 사용자가 동일한 경우, 댓글을 숨김
         if instance.comment.commentreport_set.filter(user=self.context['request'].user).exists():
-            return {}  # 빈 딕셔너리로 댓글을 숨김 처리합니다.
+            return {}  
 
         return super().to_representation(instance)
 

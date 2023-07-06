@@ -9,13 +9,13 @@ class UrlImagesSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UrlImages
-        fields = '__all__'  # 모든 필드를 serialize
+        fields = '__all__'  
 
 class WasteSpecSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = WasteSpec
-        fields = '__all__'  # 모든 필드를 serialize
+        fields = '__all__'  
 
 class UserSerializer2(serializers.ModelSerializer):
     class Meta:

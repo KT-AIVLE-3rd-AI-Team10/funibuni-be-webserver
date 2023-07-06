@@ -24,7 +24,6 @@ class WasteSpec(models.Model):
         
 
 class UrlImages(models.Model):
-    #_id = models.ObjectIdField()
     waste_id = models.AutoField(primary_key=True) 
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user')
     waste_spec_id = models.ForeignKey(WasteSpec, on_delete=models.CASCADE, db_column='waste_spec_id', null=True)

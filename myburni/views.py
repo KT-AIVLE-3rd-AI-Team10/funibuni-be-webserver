@@ -75,7 +75,7 @@ def comment_list(request):
 
     # 로그인한 사용자가 작성한 게시물 목록을 조회합니다.
     comments = Comment.objects.filter(user=user)
-    posts = [comment.post for comment in comments]  # 해당 댓글이 달린 게시물들을 가져옵니다.
+    posts = [comment.post for comment in comments]  # 해당 댓글이 달린 게시물들을 가져옴
     serializer = PostSerializer(posts, many=True)  
     return Response(serializer.data, status=200)
 
