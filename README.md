@@ -1,4 +1,4 @@
-![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/6bca5359-cddd-46d9-b3c1-2a7eb3f0f538)![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/5be49206-0669-478e-a983-ffd2a69f2de8)
+
 ![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/3cb76d09-b52e-404c-8ebe-a22733110179)
 ![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/2d3734dc-a17b-4680-a8e4-4320c4364f16)
 
