@@ -2,7 +2,7 @@
 
 # Service flow
 ![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/bd2a5aec-0fe9-443b-848c-ff8790eb3a9e)
-# tier architecture
+# 3-tier architecture
 ![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/3cb76d09-b52e-404c-8ebe-a22733110179)
 # ERD
 ![image](https://github.com/AIVLE-School-Third-Big-Project/aivle-ai-team10-be-webserver/assets/81730800/2d3734dc-a17b-4680-a8e4-4320c4364f16)
