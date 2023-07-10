@@ -126,10 +126,9 @@ class PostdetailSerializer(serializers.ModelSerializer):
     is_sharing = serializers.BooleanField(default=False)  # 기본값으로 0 설정
     user = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True)
-    
     likes_count = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
-  
+    is_like = serializers.SerializerMethodField()
     def get_comments_count(self, obj):
         return obj.comments.count()
 
@@ -142,11 +141,16 @@ class PostdetailSerializer(serializers.ModelSerializer):
             'nickname': obj.user.nickname
         }
         return user_data
-
+    def get_is_like(self, obj):
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            return obj.likes.filter(user=user).exists()
+        return False
+    
     class Meta:
         model = Post
         fields = ['post_id', 'user', 'title', 'content', 'expired_date', 'image_url',
                   'product_top_category', 'product_mid_category', 'product_low_category',
                   'address_city', 'address_district', 'address_dong','created_at', 'is_sharing',
-                  'comments_count', 'likes_count','comments']
+                  'comments_count','is_like','likes_count','comments']
     

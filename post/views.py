@@ -30,6 +30,28 @@ def post_list(request):
     return Response(serializer.data)
     
 #게시판 상세,수정,삭제
+# @api_view(['GET', 'PUT', 'DELETE'])
+# @permission_classes([IsAuthenticatedOrReadOnly])
+# def post_detail(request, post_id):
+#     try:
+#         post = Post.objects.get(pk=post_id)
+#     except Post.DoesNotExist:
+#         return Response({'error': '게시물을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+#     if request.method == 'GET':
+#         serializer = PostdetailSerializer(post)
+#         return Response(serializer.data)
+#     elif request.method == 'PUT':
+#         serializer = PostSerializer(post, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({'post_id': post_id, 'post': serializer.data})
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'DELETE':
+#         post.delete()
+#         return Response({'post_id': post_id}, status=status.HTTP_204_NO_CONTENT)
+
+#     return Response({'error': '잘못된 요청입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def post_detail(request, post_id):
@@ -38,7 +60,7 @@ def post_detail(request, post_id):
     except Post.DoesNotExist:
         return Response({'error': '게시물을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
-        serializer = PostdetailSerializer(post)
+        serializer = PostdetailSerializer(post, context={'request': request})
         return Response(serializer.data)
     elif request.method == 'PUT':
         serializer = PostSerializer(post, data=request.data, partial=True)
