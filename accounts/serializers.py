@@ -15,6 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'name' in validated_data:
             instance.nickname = self.generate_nickname(validated_data['name'])
+        if 'nickname' in validated_data:
+            instance.nickname = validated_data['nickname']
         instance.save()
         return instance
 

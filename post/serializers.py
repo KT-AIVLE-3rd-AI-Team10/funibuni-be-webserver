@@ -71,20 +71,20 @@ class CommentReportSerializer(serializers.ModelSerializer):
         return super().to_representation(instance)
 
 #댓글
-class CommentSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-    post_id = serializers.PrimaryKeyRelatedField(source='post', read_only=True)
+# class CommentSerializer(serializers.ModelSerializer):
+#     user = serializers.SerializerMethodField()
+#     post_id = serializers.PrimaryKeyRelatedField(source='post', read_only=True)
 
-    class Meta:
-        model = Comment
-        fields = ['comment_id', 'post_id', 'user', 'comment', 'created_at']
+#     class Meta:
+#         model = Comment
+#         fields = ['comment_id', 'post_id', 'user', 'comment', 'created_at']
 
-    def get_user(self, obj):
-        user_data = {
-            'user_id': obj.user.id,
-            'nickname': obj.user.nickname
-        }
-        return user_data
+#     def get_user(self, obj):
+#         user_data = {
+#             'user_id': obj.user.id,
+#             'nickname': obj.user.nickname
+#         }
+#         return user_data
     
 
 #대댓글
@@ -102,6 +102,25 @@ class ReplySerializer(serializers.ModelSerializer):
             'nickname': obj.user.nickname
         }
         return user_data
+    
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    post_id = serializers.PrimaryKeyRelatedField(source='post', read_only=True)
+    reply_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ['comment_id', 'post_id', 'user', 'comment', 'created_at', 'reply_count']
+
+    def get_user(self, obj):
+        user_data = {
+            'user_id': obj.user.id,
+            'nickname': obj.user.nickname
+        }
+        return user_data
+
+    def get_reply_count(self, obj):
+        return obj.reply_set.count()
 
 #대댓글 신고
 class ReplyReportSerializer(serializers.ModelSerializer):
@@ -126,8 +145,7 @@ class PostdetailSerializer(serializers.ModelSerializer):
     
     likes_count = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
-    replys_count = serializers.SerializerMethodField()
-    
+  
     def get_comments_count(self, obj):
         return obj.comments.count()
 
@@ -140,13 +158,11 @@ class PostdetailSerializer(serializers.ModelSerializer):
             'nickname': obj.user.nickname
         }
         return user_data
-    
-    def get_replys_count(self, obj):
-        return obj.comments.aggregate(replys_count=Count('reply'))['replys_count']
+
     class Meta:
         model = Post
         fields = ['post_id', 'user', 'title', 'content', 'expired_date', 'image_url',
                   'product_top_category', 'product_mid_category', 'product_low_category',
                   'address_city', 'address_district', 'address_dong','created_at', 'is_sharing',
-                  'comments_count', 'likes_count','comments','replys_count']
+                  'comments_count', 'likes_count','comments']
     
