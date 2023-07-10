@@ -3,18 +3,21 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from accounts.models import User,Address
 
 class UserSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='id', read_only=True)
     class Meta:
         model = User
-        fields = ('phone_number', 'name','nickname')
+        fields = ('user_id', 'phone_number', 'name', 'nickname')
 
     def create(self, validated_data):
         validated_data['nickname'] = self.generate_nickname(validated_data['name'])
         return super().create(validated_data)
+
     def update(self, instance, validated_data):
         if 'name' in validated_data:
             instance.nickname = self.generate_nickname(validated_data['name'])
         instance.save()
         return instance
+
     def generate_nickname(self, name):
         nickname = name[0] + '버니'
         return nickname
