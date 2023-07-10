@@ -70,23 +70,6 @@ class CommentReportSerializer(serializers.ModelSerializer):
 
         return super().to_representation(instance)
 
-#댓글
-# class CommentSerializer(serializers.ModelSerializer):
-#     user = serializers.SerializerMethodField()
-#     post_id = serializers.PrimaryKeyRelatedField(source='post', read_only=True)
-
-#     class Meta:
-#         model = Comment
-#         fields = ['comment_id', 'post_id', 'user', 'comment', 'created_at']
-
-#     def get_user(self, obj):
-#         user_data = {
-#             'user_id': obj.user.id,
-#             'nickname': obj.user.nickname
-#         }
-#         return user_data
-    
-
 #대댓글
 class ReplySerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(read_only=True)
@@ -102,7 +85,8 @@ class ReplySerializer(serializers.ModelSerializer):
             'nickname': obj.user.nickname
         }
         return user_data
-    
+
+#댓글   
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     post_id = serializers.PrimaryKeyRelatedField(source='post', read_only=True)

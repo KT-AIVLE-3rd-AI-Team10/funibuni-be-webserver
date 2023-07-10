@@ -1,73 +1,38 @@
-.slider{
-    width: 500px;
-    height: 300px;
+.slider-container {
     position: relative;
-    margin: 0 auto;
+    width: 100%;
+    height: 295px;
     overflow: hidden;
-}
-.slider input[type=radio]{
-    display: none;
-}
-
-ul.imgs{
-    padding: 0;
-    margin: 0;
-}
-ul.imgs li{
+    }
+    
+    .slider {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    }
+    
+    .slider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+    
+    .dot-container {
     position: absolute;
-    left: 640px;
-    transition-delay: 0.5s;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.bullets{
-    position: absolute;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 20px;
-    z-index: 2;
-}
-.bullets label{
+    }
+    
+    .dot {
     display: inline-block;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background-color: rgba(0,0,0,0.55);
-    width: 20px;
-    height: 20px;
+    background-color: gray;
+    margin: 0 5px;
     cursor: pointer;
-}
-
-.slider input[type=radio]:nth-child(1):checked~.bullets>label:nth-child(1){
-    background-color: #31D7C3;
-}
-.slider input[type=radio]:nth-child(2):checked~.bullets>label:nth-child(2){
-    background-color: #31D7C3;
-}
-.slider input[type=radio]:nth-child(3):checked~.bullets>label:nth-child(3){
-    background-color: #31D7C3;
-}
-.slider input[type=radio]:nth-child(4):checked~.bullets>label:nth-child(4){
-    background-color: #31D7C3;
-}
-
-.slider input[type=radio]:nth-child(1):checked~ul.imgs>li:nth-child(1){
-    left: 0;
-    transition: 0.5s;
-    z-index:1;
-}
-.slider input[type=radio]:nth-child(2):checked~ul.imgs>li:nth-child(2){
-    left: 0;
-    transition: 0.5s;
-    z-index:1;
-}
-.slider input[type=radio]:nth-child(3):checked~ul.imgs>li:nth-child(3){
-    left: 0;
-    transition: 0.5s;
-    z-index:1;
-}
-.slider input[type=radio]:nth-child(4):checked~ul.imgs>li:nth-child(4){
-    left: 0;
-    transition: 0.5s;
-    z-index:1;
-}
+    }
+    
+    .dot.active {
+    background-color: black;
+    }
